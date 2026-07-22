@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAKA Essoham Exaucé Amen — Technicien Réseau &amp; Sécurité Informatique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1220;
+    --bg-panel:#121A2B;
+    --bg-panel-2:#0F1728;
+    --text:#E7EAF0;
+    --text-dim:#8A93A6;
+    --amber:#FFB84D;
+    --teal:#5EEAD4;
+    --teal-dim:rgba(94,234,212,0.14);
+    --amber-dim:rgba(255,184,77,0.14);
+    --border:#223049;
+    --radius:10px;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--teal-dim); color:var(--teal);}
+  :focus-visible{outline:2px solid var(--teal); outline-offset:3px;}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  /* NAV */
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,18,32,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; max-width:1080px; margin:0 auto;
+  }
+  .nav-brand{
+    font-family:var(--mono); font-size:13px; color:var(--teal);
+    letter-spacing:0.02em;
+  }
+  .nav-links{display:flex; gap:22px; list-style:none; flex-wrap:wrap;}
+  .nav-links a{
+    font-family:var(--mono); font-size:12.5px; color:var(--text-dim);
+    text-decoration:none; transition:color .15s ease;
+  }
+  .nav-links a:hover{color:var(--amber);}
+  .nav-links a.active{color:var(--teal);}
+
+  /* HERO */
+  .hero{
+    padding:100px 0 80px;
+    border-bottom:1px solid var(--border);
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:44px 44px;
+    opacity:0.18;
+    mask-image:radial-gradient(ellipse 70% 60% at 30% 20%, black, transparent);
+  }
+  .hero-inner{position:relative; z-index:1;}
+  .prompt{
+    font-family:var(--mono); font-size:14px; color:var(--text-dim);
+    margin-bottom:18px; display:flex; align-items:center; gap:10px;
+  }
+  .prompt .caret{
+    display:inline-block; width:8px; height:16px; background:var(--amber);
+    animation:blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+  .prompt-typed{color:var(--teal); border-right:2px solid transparent;}
+  h1.name{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(32px, 5.2vw, 58px);
+    line-height:1.05; letter-spacing:-0.01em;
+    margin-bottom:14px;
+  }
+  .role{
+    font-family:var(--mono); color:var(--amber);
+    font-size:clamp(14px,2vw,18px);
+    margin-bottom:26px; letter-spacing:0.01em;
+  }
+  .profile-text{
+    max-width:640px; color:var(--text-dim); font-size:16px; margin-bottom:34px;
+  }
+  .status-row{
+    display:flex; align-items:center; gap:10px; margin-bottom:36px;
+    font-family:var(--mono); font-size:13px; color:var(--text-dim);
+  }
+  .status-dot{
+    width:9px; height:9px; border-radius:50%; background:var(--teal);
+    box-shadow:0 0 0 4px var(--teal-dim);
+    animation:pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.4;}}
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono); font-size:13px; padding:12px 20px;
+    border-radius:var(--radius); text-decoration:none; display:inline-block;
+    border:1px solid var(--border); transition:all .15s ease;
+  }
+  .btn-primary{background:var(--teal); color:#06231E; border-color:var(--teal); font-weight:600;}
+  .btn-primary:hover{background:#7FF3DE;}
+  .btn-ghost{color:var(--text); }
+  .btn-ghost:hover{border-color:var(--amber); color:var(--amber);}
+
+  /* SECTION SHARED */
+  section{padding:72px 0; border-bottom:1px solid var(--border);}
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; color:var(--amber);
+    text-transform:uppercase; letter-spacing:0.12em; margin-bottom:10px;
+  }
+  h2.section-title{
+    font-family:var(--display); font-weight:600;
+    font-size:clamp(24px,3.4vw,32px); margin-bottom:34px;
+  }
+
+  /* PROFIL */
+  .profil-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:40px;}
+  .profil-grid p{color:var(--text-dim); font-size:15.5px; margin-bottom:14px;}
+  .info-card{
+    background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:var(--radius); padding:22px;
+    font-family:var(--mono); font-size:13px;
+  }
+  .info-card dt{color:var(--text-dim); margin-top:12px;}
+  .info-card dt:first-child{margin-top:0;}
+  .info-card dd{color:var(--text); margin-bottom:2px;}
+
+  /* COMPETENCES */
+  .skills-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px;}
+  .skill-block{
+    background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:var(--radius); padding:20px;
+  }
+  .skill-block h3{
+    font-family:var(--mono); font-size:12.5px; color:var(--teal);
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .skill-block h3::before{content:"›"; color:var(--amber);}
+  .pill-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .pill{
+    font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
+    border:1px solid var(--border); border-radius:6px; padding:5px 9px;
+  }
+
+  /* EXPERIENCES */
+  .timeline{position:relative; padding-left:26px;}
+  .timeline::before{
+    content:""; position:absolute; left:5px; top:6px; bottom:6px; width:1px;
+    background:var(--border);
+  }
+  .tl-item{position:relative; margin-bottom:38px;}
+  .tl-item:last-child{margin-bottom:0;}
+  .tl-item::before{
+    content:""; position:absolute; left:-26px; top:5px; width:11px; height:11px;
+    border-radius:50%; background:var(--bg); border:2px solid var(--amber);
+  }
+  .tl-meta{
+    font-family:var(--mono); font-size:12px; color:var(--amber); margin-bottom:6px;
+  }
+  .tl-item h3{font-family:var(--display); font-size:18px; margin-bottom:4px; font-weight:600;}
+  .tl-item .tl-org{color:var(--text-dim); font-size:13.5px; margin-bottom:10px;}
+  .tl-item ul{padding-left:18px; color:var(--text-dim); font-size:14.5px;}
+  .tl-item li{margin-bottom:5px;}
+
+  /* PROJETS */
+  .project-card{
+    background:var(--bg-panel); border:1px solid var(--border);
+    border-radius:var(--radius); padding:26px; margin-bottom:24px;
+  }
+  .project-card h3{font-family:var(--display); font-size:19px; margin-bottom:6px;}
+  .project-card .p-desc{color:var(--text-dim); font-size:14.5px; margin-bottom:18px; max-width:680px;}
+  .qos-bars{display:flex; flex-direction:column; gap:8px; max-width:420px;}
+  .qos-row{display:flex; align-items:center; gap:12px; font-family:var(--mono); font-size:12px;}
+  .qos-label{width:110px; color:var(--text-dim); flex-shrink:0;}
+  .qos-track{flex:1; height:8px; background:var(--bg-panel-2); border-radius:4px; overflow:hidden;}
+  .qos-fill{height:100%; border-radius:4px;}
+  .qos-fill.voice{width:90%; background:var(--teal);}
+  .qos-fill.video{width:65%; background:#4DD0E1;}
+  .qos-fill.data{width:35%; background:var(--amber);}
+
+  /* VLSM VISUALIZER */
+  .vlsm-legend{
+    font-family:var(--mono); font-size:12.5px; color:var(--text-dim); margin-bottom:16px;
+  }
+  .vlsm-legend b{color:var(--teal);}
+  .vlsm-bar{
+    display:flex; width:100%; height:52px; border-radius:8px; overflow:hidden;
+    border:1px solid var(--border); margin-bottom:18px;
+  }
+  .vlsm-seg{
+    height:100%; cursor:pointer; border-right:1px solid var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:10.5px; color:#06231E; font-weight:600;
+    transition:filter .15s ease, transform .15s ease;
+    overflow:hidden; white-space:nowrap;
+  }
+  .vlsm-seg:last-child{border-right:none;}
+  .vlsm-seg:hover, .vlsm-seg.active{filter:brightness(1.15); transform:scaleY(1.06);}
+  .vlsm-seg.c1{background:var(--teal);}
+  .vlsm-seg.c2{background:var(--amber);}
+  .vlsm-seg.reserve{background:var(--bg-panel-2); color:var(--text-dim); border:1px dashed var(--border);}
+  .vlsm-detail{
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 22px; font-family:var(--mono); font-size:13px;
+  }
+  .vlsm-detail .vd-title{color:var(--teal); font-size:14px; margin-bottom:12px; font-weight:600;}
+  .vd-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px 20px;}
+  .vd-grid div span{display:block; color:var(--text-dim); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px;}
+  .vlsm-hint{font-family:var(--mono); font-size:11.5px; color:var(--text-dim); margin-top:10px;}
+
+  /* FLOW DIAGRAM */
+  .flow-diagram{
+    display:flex; align-items:center; gap:0; overflow-x:auto;
+    padding:20px 4px 26px; margin-bottom:6px;
+  }
+  .flow-node{
+    flex-shrink:0; width:118px; height:118px; border-radius:12px;
+    background:var(--bg-panel-2); border:1px solid var(--border);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:10px; cursor:pointer;
+    font-family:var(--mono); font-size:11px; color:var(--text-dim);
+    transition:all .15s ease;
+  }
+  .flow-node .fn-icon{font-size:20px; margin-bottom:8px;}
+  .flow-node:hover, .flow-node.active{
+    border-color:var(--teal); color:var(--text); background:var(--teal-dim);
+  }
+  .flow-arrow{
+    flex-shrink:0; width:34px; height:2px; background:var(--border); position:relative;
+  }
+  .flow-arrow::after{
+    content:""; position:absolute; right:-1px; top:-4px;
+    border:5px solid transparent; border-left-color:var(--border);
+  }
+
+  /* FORMATION */
+  .edu-item{margin-bottom:20px;}
+  .edu-item .edu-year{font-family:var(--mono); color:var(--amber); font-size:12.5px;}
+  .edu-item h3{font-family:var(--display); font-size:17px; margin:4px 0 2px;}
+  .edu-item p{color:var(--text-dim); font-size:14px;}
+
+  /* CONTACT */
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:32px;}
+  .contact-card{
+    background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:24px;
+  }
+  .contact-card h3{font-family:var(--mono); font-size:12.5px; color:var(--teal); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px;}
+  .contact-line{display:flex; gap:10px; font-size:14.5px; margin-bottom:10px; color:var(--text-dim);}
+  .contact-line b{color:var(--text); font-weight:500;}
+
+  footer{
+    padding:34px 0; text-align:center; font-family:var(--mono);
+    font-size:12px; color:var(--text-dim);
+  }
+
+  @media (max-width:760px){
+    .profil-grid, .contact-grid{grid-template-columns:1fr;}
+    .nav-links{gap:14px;}
+    .hero{padding:80px 0 56px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-brand">baka@reseau:~$</div>
+    <ul class="nav-links">
+      <li><a href="#profil">~/profil</a></li>
+      <li><a href="#competences">~/competences</a></li>
+      <li><a href="#experiences">~/experiences</a></li>
+      <li><a href="#projets">~/projets</a></li>
+      <li><a href="#formation">~/formation</a></li>
+      <li><a href="#contact">~/contact</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="hero" id="accueil">
+  <div class="wrap hero-inner">
+    <div class="prompt"><span>root@baka:~$</span><span class="prompt-typed" id="typed"></span><span class="caret"></span></div>
+    <h1 class="name">BAKA Essoham Exaucé Amen</h1>
+    <div class="role">Technicien Réseau &amp; Sécurité Informatique</div>
+    <p class="profile-text">Diplômé en Réseaux et Sécurité Informatique, je conçois, déploie et sécurise des infrastructures réseau — de l'adressage IP au routage, en passant par la virtualisation et le pare-feu. Rigoureux, curieux, et à l'aise aussi bien en salle serveur qu'en ligne de commande.</p>
+    <div class="status-row"><span class="status-dot"></span> Statut : disponible pour stage ou premier emploi — Lomé, Togo</div>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#projets">Voir les projets</a>
+      <a class="btn btn-ghost" href="#contact">Me contacter</a>
+    </div>
+  </div>
+</section>
+
+<section id="profil">
+  <div class="wrap profil-grid">
+    <div>
+      <div class="eyebrow">Profil</div>
+      <h2 class="section-title">Qui suis-je</h2>
+      <p>Diplômé en Réseaux et Sécurité Informatique, motivé et rigoureux, je dispose de solides bases en administration systèmes et réseaux, sécurité informatique et services réseaux.</p>
+      <p>Capable de travailler en équipe, d'apprendre rapidement et de m'adapter à des environnements techniques variés, je suis à la recherche d'un stage ou d'un premier emploi afin de mettre mes compétences en pratique et évoluer professionnellement.</p>
+      <p style="color:var(--text-dim); font-size:13.5px; margin-top:20px;">Loisirs : natation · billard · voyage · réseau &nbsp;|&nbsp; Langues : Français (natif), Anglais technique / intermédiaire</p>
+    </div>
+    <div class="info-card">
+      <dl>
+        <dt>localisation</dt><dd>Totsi – Gbinkomé, Togo</dd>
+        <dt>permis</dt><dd>Oui</dd>
+        <dt>disponibilité</dt><dd>Stage / premier emploi</dd>
+        <dt>qualités</dt><dd>Ponctualité · esprit d'équipe · débrouillard</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="competences">
+  <div class="wrap">
+    <div class="eyebrow">Compétences</div>
+    <h2 class="section-title">Stack technique</h2>
+    <div class="skills-grid">
+      <div class="skill-block">
+        <h3>Réseaux</h3>
+        <div class="pill-row">
+          <span class="pill">LAN/WAN</span><span class="pill">TCP/IP</span><span class="pill">VLAN</span>
+          <span class="pill">Routage &amp; Switching (Cisco)</span><span class="pill">OSPF</span>
+          <span class="pill">DNS</span><span class="pill">DHCP</span><span class="pill">NAT</span>
+          <span class="pill">QoS</span><span class="pill">Nagios</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <h3>Systèmes</h3>
+        <div class="pill-row">
+          <span class="pill">Windows Server 2016/2019/2022</span><span class="pill">Linux (Ubuntu/Debian)</span>
+          <span class="pill">Active Directory</span><span class="pill">GPO</span><span class="pill">RDP</span>
+          <span class="pill">OpenWrt</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <h3>Sécurité</h3>
+        <div class="pill-row">
+          <span class="pill">Gestion des accès</span><span class="pill">Politiques de sécurité</span>
+          <span class="pill">Sauvegardes</span><span class="pill">Pare-feu</span><span class="pill">PfSense</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <h3>Virtualisation &amp; Cloud</h3>
+        <div class="pill-row">
+          <span class="pill">VMware</span><span class="pill">VirtualBox</span><span class="pill">Citrix</span>
+          <span class="pill">AWS (EC2, S3)</span><span class="pill">Google Cloud</span>
+        </div>
+      </div>
+      <div class="skill-block">
+        <h3>DevOps &amp; Outils</h3>
+        <div class="pill-row">
+          <span class="pill">Docker</span><span class="pill">Git / GitHub</span><span class="pill">Nginx</span>
+          <span class="pill">VS Code</span><span class="pill">Packet Tracer / EVE-NG / GNS3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experiences">
+  <div class="wrap">
+    <div class="eyebrow">Expériences</div>
+    <h2 class="section-title">Parcours professionnel</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-meta">2026 · 3 mois</div>
+        <h3>Stage — Direction des Systèmes d'Information (DSI)</h3>
+        <div class="tl-org">Moov Africa Togo</div>
+        <ul>
+          <li>Conception d'un plan d'adressage IP optimisé (VLSM) pour un réseau d'entreprise multi-sites</li>
+          <li>Modélisation de l'architecture réseau sous simulateur (Packet Tracer / EVE-NG / GNS3)</li>
+          <li>Configuration du routage OSPF sur l'ensemble des routeurs</li>
+          <li>Déploiement des VLAN et du DHCP par équipement, avec nomenclature dédiée</li>
+          <li>Mise en place du NAT sur le routeur de sortie Internet</li>
+          <li>Configuration de liaisons point-à-point sur équipements Ubiquiti airMAX M5</li>
+          <li>Déploiement d'une solution de supervision des utilisateurs MikroTik via MikHmon, hébergée sur le cloud</li>
+          <li>Mise en place d'un accès distant sécurisé par VPN WireGuard vers une instance AWS EC2</li>
+          <li>Configuration d'un système d'alerte AWS CloudWatch pour surveiller la disponibilité du service</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-meta">Juin – Octobre 2025</div>
+        <h3>Stage technicien réseau</h3>
+        <div class="tl-org">Melchior Boot</div>
+        <ul>
+          <li>200+ interventions de dépannage sur équipements réseau</li>
+          <li>Installation et configuration de réseaux Wi-Fi publics et privés</li>
+          <li>Gestion autonome du matériel et du local technique (30+ clients)</li>
+          <li>Maintenance et optimisation des performances réseau</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projets">
+  <div class="wrap">
+    <div class="eyebrow">Projets</div>
+    <h2 class="section-title">Réalisations techniques</h2>
+
+    <div class="project-card">
+      <h3>Priorisation de trafic (QoS)</h3>
+      <p class="p-desc">Mise en place d'une politique de qualité de service pour prioriser les flux critiques — voix et vidéo — face au trafic de données classique, afin de garantir la bande passante et réduire la latence des services sensibles.</p>
+      <div class="qos-bars">
+        <div class="qos-row"><span class="qos-label">Voix (VoIP)</span><div class="qos-track"><div class="qos-fill voice"></div></div><span>Priorité haute</span></div>
+        <div class="qos-row"><span class="qos-label">Vidéo</span><div class="qos-track"><div class="qos-fill video"></div></div><span>Priorité moyenne</span></div>
+        <div class="qos-row"><span class="qos-label">Données</span><div class="qos-track"><div class="qos-fill data"></div></div><span>Best effort</span></div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h3>Plan d'adressage IP — Moov Africa Togo</h3>
+      <p class="p-desc">Découpage en VLSM du bloc <b style="color:var(--teal)">192.168.4.0/22</b> pour couvrir l'ensemble d'un réseau d'entreprise multi-sites : utilisateurs filaires, téléphonie IP, Wi-Fi (Trusted / Guest), ferme de serveurs (production, préproduction, test), DMZ (entreprise / partenaires) et deux agences distantes. Cliquez sur un bloc pour voir le détail du sous-réseau.</p>
+      <div class="vlsm-legend">Bloc initial : <b>192.168.4.0/22</b> · 1024 adresses réparties en <b id="segcount">12</b> sous-réseaux</div>
+      <div class="vlsm-bar" id="vlsmBar"></div>
+      <div class="vlsm-detail" id="vlsmDetail">
+        <div class="vd-title">Sélectionnez un sous-réseau ci-dessus ↑</div>
+        <div class="vlsm-hint">Astuce : la largeur de chaque bloc est proportionnelle au nombre d'adresses allouées.</div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <h3>Supervision &amp; accès distant sécurisé — MikroTik / AWS</h3>
+      <p class="p-desc">Solution de supervision des utilisateurs connectés aux routeurs MikroTik via <b style="color:var(--teal)">MikHmon</b>, déployée sur une instance <b style="color:var(--teal)">AWS EC2</b> et accessible à distance via un tunnel <b style="color:var(--teal)">VPN WireGuard</b>, avec un système d'alerte <b style="color:var(--teal)">CloudWatch</b> pour surveiller la disponibilité du service. Cliquez sur un maillon de la chaîne pour le détail.</p>
+      <div class="flow-diagram" id="flowDiagram"></div>
+      <div class="vlsm-detail" id="flowDetail">
+        <div class="vd-title">Sélectionnez un élément de la chaîne ci-dessus ↑</div>
+        <div class="vlsm-hint">La donnée circule de l'administrateur jusqu'aux routeurs MikroTik en passant par le tunnel chiffré et le cloud.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="formation">
+  <div class="wrap">
+    <div class="eyebrow">Formation</div>
+    <h2 class="section-title">Parcours académique</h2>
+    <div class="edu-item">
+      <div class="edu-year">2025</div>
+      <h3>Licence Réseaux et Sécurité Informatique — Mention Bien</h3>
+      <p>Collège de Paris Supérieur, Togo</p>
+    </div>
+    <div class="edu-item">
+      <div class="edu-year">2022</div>
+      <h3>Baccalauréat D — Mention Assez Bien</h3>
+      <p>Collège Protestant Lomé Agbalèpédogan</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="eyebrow">Contact</div>
+    <h2 class="section-title">Discutons</h2>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>Coordonnées</h3>
+        <div class="contact-line">📞 <b>+228 97 27 38 60</b></div>
+        <div class="contact-line">✉️ <b>essohambaka@gmail.com</b></div>
+        <div class="contact-line">📍 <b>Totsi – Gbinkomé, Togo</b></div>
+      </div>
+      <div class="contact-card">
+        <h3>Référence</h3>
+        <div class="contact-line"><b>M. Agoutoco Poko Caleb Benaja</b></div>
+        <div class="contact-line" style="margin-top:-6px;">Ingénieur expert en cybersécurité, big data, administration des systèmes d'information et gestion des réseaux</div>
+        <div class="contact-line" style="margin-top:6px; font-size:13px; color:var(--text-dim);">Coordonnées complètes transmises sur demande</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  root@baka:~$ echo "merci de votre visite" — © <span id="year"></span> BAKA Essoham Exaucé Amen
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Typing effect in hero prompt
+  (function(){
+    const el = document.getElementById('typed');
+    const text = "whoami";
+    let i = 0;
+    function type(){
+      if(i <= text.length){
+        el.textContent = text.slice(0, i);
+        i++;
+        setTimeout(type, 130);
+      }
+    }
+    type();
+  })();
+
+  // VLSM data — plan d'adressage réel du projet Moov Africa Togo (192.168.4.0/22)
+  const subnets = [
+    {name:"Utilisateurs filaires", need:250, cidr:"/24", net:"192.168.4.0", first:"192.168.4.1", last:"192.168.4.254", bcast:"192.168.4.255", size:256},
+    {name:"Téléphonie IP (VLAN VOICE)", need:120, cidr:"/25", net:"192.168.5.0", first:"192.168.5.1", last:"192.168.5.126", bcast:"192.168.5.127", size:128},
+    {name:"Wi-Fi Trusted", need:100, cidr:"/25", net:"192.168.5.128", first:"192.168.5.129", last:"192.168.5.254", bcast:"192.168.5.255", size:128},
+    {name:"Serveurs Production", need:64, cidr:"/25", net:"192.168.6.0", first:"192.168.6.1", last:"192.168.6.126", bcast:"192.168.6.127", size:128},
+    {name:"Wi-Fi Guest", need:50, cidr:"/26", net:"192.168.6.128", first:"192.168.6.129", last:"192.168.6.190", bcast:"192.168.6.191", size:64},
+    {name:"Serveurs Préproduction", need:28, cidr:"/26", net:"192.168.6.192", first:"192.168.6.193", last:"192.168.6.254", bcast:"192.168.6.255", size:64},
+    {name:"Agence 1", need:39, cidr:"/26", net:"192.168.7.0", first:"192.168.7.1", last:"192.168.7.62", bcast:"192.168.7.63", size:64},
+    {name:"Agence 2", need:32, cidr:"/26", net:"192.168.7.64", first:"192.168.7.65", last:"192.168.7.126", bcast:"192.168.7.127", size:64},
+    {name:"DMZ Entreprise", need:15, cidr:"/27", net:"192.168.7.128", first:"192.168.7.129", last:"192.168.7.158", bcast:"192.168.7.159", size:32},
+    {name:"DMZ Partenaires", need:5, cidr:"/28", net:"192.168.7.160", first:"192.168.7.161", last:"192.168.7.174", bcast:"192.168.7.175", size:16},
+    {name:"Serveurs Test", need:8, cidr:"/28", net:"192.168.7.176", first:"192.168.7.177", last:"192.168.7.190", bcast:"192.168.7.191", size:16},
+    {name:"Réserve", need:0, cidr:"/26", net:"192.168.7.192", first:"—", last:"—", bcast:"192.168.7.255", size:64, reserve:true}
+  ];
+
+  const bar = document.getElementById('vlsmBar');
+  const detail = document.getElementById('vlsmDetail');
+  document.getElementById('segcount').textContent = subnets.length;
+
+  subnets.forEach((s, idx) => {
+    const seg = document.createElement('div');
+    seg.className = 'vlsm-seg ' + (s.reserve ? 'reserve' : (idx % 2 === 0 ? 'c1' : 'c2'));
+    seg.style.width = (s.size / 1024 * 100) + '%';
+    seg.textContent = s.size >= 64 ? s.name.split(' ')[0] : '';
+    seg.setAttribute('tabindex', '0');
+    seg.setAttribute('role', 'button');
+    seg.setAttribute('aria-label', s.name);
+    function show(){
+      document.querySelectorAll('.vlsm-seg').forEach(el => el.classList.remove('active'));
+      seg.classList.add('active');
+      detail.innerHTML = `
+        <div class="vd-title">${s.name}${s.reserve ? ' (bloc libre pour extension future)' : ''}</div>
+        <div class="vd-grid">
+          <div><span>Besoin</span>${s.reserve ? '—' : s.need + ' hôtes'}</div>
+          <div><span>Masque</span>${s.cidr}</div>
+          <div><span>Adresse réseau</span>${s.net}</div>
+          <div><span>Première utilisable</span>${s.first}</div>
+          <div><span>Dernière utilisable</span>${s.last}</div>
+          <div><span>Broadcast</span>${s.bcast}</div>
+        </div>`;
+    }
+    seg.addEventListener('click', show);
+    seg.addEventListener('keypress', e => { if(e.key === 'Enter') show(); });
+    bar.appendChild(seg);
+  });
+
+  // Diagramme de flux — Supervision MikroTik / WireGuard / AWS
+  const flowNodes = [
+    {icon:'🖥️', name:'Administrateur', detail:'Poste de l\'administrateur réseau, point de départ de la connexion distante.'},
+    {icon:'🔒', name:'VPN WireGuard', detail:'Tunnel chiffré WireGuard établi pour un accès distant sécurisé à l\'infrastructure cloud, sans exposer de ports publics inutiles.'},
+    {icon:'☁️', name:'AWS EC2', detail:'Instance cloud hébergeant MikHmon, l\'interface web de supervision des routeurs MikroTik.'},
+    {icon:'📡', name:'MikroTik', detail:'Routeurs MikroTik supervisés en temps réel via MikHmon : utilisateurs connectés, sessions actives, consommation de données.'},
+    {icon:'🔔', name:'CloudWatch', detail:'Système d\'alerte AWS CloudWatch configuré sur l\'instance EC2 pour surveiller la disponibilité du service et notifier en cas d\'anomalie.'}
+  ];
+
+  const flowDiagram = document.getElementById('flowDiagram');
+  const flowDetail = document.getElementById('flowDetail');
+
+  flowNodes.forEach((n, idx) => {
+    const node = document.createElement('div');
+    node.className = 'flow-node';
+    node.setAttribute('tabindex', '0');
+    node.setAttribute('role', 'button');
+    node.setAttribute('aria-label', n.name);
+    node.innerHTML = `<div class="fn-icon">${n.icon}</div>${n.name}`;
+    function show(){
+      document.querySelectorAll('.flow-node').forEach(el => el.classList.remove('active'));
+      node.classList.add('active');
+      flowDetail.innerHTML = `
+        <div class="vd-title">${n.name}</div>
+        <div class="vlsm-hint" style="margin-top:0; font-size:13px; color:var(--text-dim);">${n.detail}</div>`;
+    }
+    node.addEventListener('click', show);
+    node.addEventListener('keypress', e => { if(e.key === 'Enter') show(); });
+    flowDiagram.appendChild(node);
+    if(idx < flowNodes.length - 1){
+      const arrow = document.createElement('div');
+      arrow.className = 'flow-arrow';
+      flowDiagram.appendChild(arrow);
+    }
+  });
+
+  // Surlignage du lien de navigation actif au défilement
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href')));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const id = '#' + entry.target.id;
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => { if(s) observer.observe(s); });
+</script>
+
+</body>
+</html>
