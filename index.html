@@ -1,651 +1,971 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BAKA Essoham Exaucé Amen — Technicien Réseau &amp; Sécurité Informatique</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amen BAKA | Systèmes, réseaux et sécurité</title>
+<meta name="description" content="Portfolio de BAKA Essoham Exaucé Amen, administrateur systèmes, réseaux et sécurité basé à Lomé, Togo.">
+<meta property="og:title" content="Amen BAKA | Systèmes, réseaux et sécurité">
+<meta property="og:description" content="Réseaux WiFi, liaisons point-à-point, QoS, supervision Grafana/Prometheus/Loki, Active Directory, pfSense.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2313212F'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23E0702A'/%3E%3Ccircle cx='14' cy='16' r='5' fill='%232369C9'/%3E%3Ccircle cx='50' cy='16' r='5' fill='%232E9A5B'/%3E%3Ccircle cx='32' cy='52' r='5' fill='%232369C9'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0B1220;
-    --bg-panel:#121A2B;
-    --bg-panel-2:#0F1728;
-    --text:#E7EAF0;
-    --text-dim:#8A93A6;
-    --amber:#FFB84D;
-    --teal:#5EEAD4;
-    --teal-dim:rgba(94,234,212,0.14);
-    --amber-dim:rgba(255,184,77,0.14);
-    --border:#223049;
-    --radius:10px;
-    --mono:'JetBrains Mono', ui-monospace, monospace;
-    --display:'Space Grotesk', sans-serif;
-    --body:'Inter', sans-serif;
+/* ===== Tokens : les couleurs reprennent les paires du câblage Ethernet T568B ===== */
+:root{
+  --paper:#EEF2F5; --surface:#FFFFFF; --ink:#13212F; --muted:#56697A; --rule:#CBD5DD;
+  --orange:#D9661F; --blue:#2369C9; --green:#2A8F55; --brown:#8A5A3B; --red:#C73550;
+  --grid:rgba(35,105,201,.07); --shadow:0 18px 40px -24px rgba(19,33,47,.45);
+  --term-bg:#13212F; --term-ink:#DCE6EE;
+  --display:"Chakra Petch",system-ui,sans-serif; --body:"Manrope",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  --maxw:1160px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1824; --surface:#152333; --ink:#E4ECF3; --muted:#93A6B8; --rule:#24384C;
+    --orange:#F2894A; --blue:#64A2F2; --green:#52C483; --brown:#C9946C; --red:#F0657E;
+    --grid:rgba(100,162,242,.06); --shadow:0 18px 40px -24px rgba(0,0,0,.7);
+    --term-bg:#0A121C; color-scheme:dark;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--body);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;}
-  ::selection{background:var(--teal-dim); color:var(--teal);}
-  :focus-visible{outline:2px solid var(--teal); outline-offset:3px;}
+}
+:root[data-theme="dark"]{
+  --paper:#0E1824; --surface:#152333; --ink:#E4ECF3; --muted:#93A6B8; --rule:#24384C;
+  --orange:#F2894A; --blue:#64A2F2; --green:#52C483; --brown:#C9946C; --red:#F0657E;
+  --grid:rgba(100,162,242,.06); --shadow:0 18px 40px -24px rgba(0,0,0,.7);
+  --term-bg:#0A121C; color-scheme:dark;
+}
 
-  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{
+  font-family:var(--body);font-size:17px;line-height:1.6;color:var(--ink);background:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:32px 32px;overflow-x:hidden;transition:background-color .3s,color .3s;
+}
+a{color:inherit}
+img,svg{max-width:100%;display:block}
+:focus-visible{outline:3px solid var(--orange);outline-offset:3px;border-radius:4px}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:6px;z-index:200}
+.skip:focus{left:8px}
 
-  /* NAV */
-  header.site-nav{
-    position:sticky; top:0; z-index:50;
-    background:rgba(11,18,32,0.85);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--border);
-  }
-  .nav-inner{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:16px 28px; max-width:1080px; margin:0 auto;
-  }
-  .nav-brand{
-    font-family:var(--mono); font-size:13px; color:var(--teal);
-    letter-spacing:0.02em;
-  }
-  .nav-links{display:flex; gap:22px; list-style:none; flex-wrap:wrap;}
-  .nav-links a{
-    font-family:var(--mono); font-size:12.5px; color:var(--text-dim);
-    text-decoration:none; transition:color .15s ease;
-  }
-  .nav-links a:hover{color:var(--amber);}
-  .nav-links a.active{color:var(--teal);}
+/* ===== Navigation ===== */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.nav .wrap{display:flex;align-items:center;gap:20px;height:68px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:20px}
+.brand-mark{width:34px;height:34px}
+.nav-links{display:flex;gap:4px;list-style:none;margin-left:auto}
+.nav-links a{display:block;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;color:var(--muted);transition:color .2s,background .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--ink);background:color-mix(in srgb,var(--blue) 12%,transparent)}
+.nav-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer;display:grid;place-items:center}
+.icon-btn svg{width:20px;height:20px}
+.burger{display:none}
+@media (max-width:900px){
+  .burger{display:grid}
+  .nav-links{position:fixed;top:68px;left:0;right:0;flex-direction:column;background:var(--paper);border-bottom:1px solid var(--rule);padding:12px 20px 20px;transform:translateY(-120%);transition:transform .3s;margin:0}
+  .nav-links.open{transform:none}
+  .nav-links a{padding:12px}
+}
 
-  /* HERO */
-  .hero{
-    padding:100px 0 80px;
-    border-bottom:1px solid var(--border);
-    position:relative;
-    overflow:hidden;
-  }
-  .hero::before{
-    content:"";
-    position:absolute; inset:0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size:44px 44px;
-    opacity:0.18;
-    mask-image:radial-gradient(ellipse 70% 60% at 30% 20%, black, transparent);
-  }
-  .hero-inner{position:relative; z-index:1;}
-  .prompt{
-    font-family:var(--mono); font-size:14px; color:var(--text-dim);
-    margin-bottom:18px; display:flex; align-items:center; gap:10px;
-  }
-  .prompt .caret{
-    display:inline-block; width:8px; height:16px; background:var(--amber);
-    animation:blink 1.1s steps(1) infinite;
-  }
-  @keyframes blink{50%{opacity:0;}}
-  .prompt-typed{color:var(--teal); border-right:2px solid transparent;}
-  h1.name{
-    font-family:var(--display); font-weight:700;
-    font-size:clamp(32px, 5.2vw, 58px);
-    line-height:1.05; letter-spacing:-0.01em;
-    margin-bottom:14px;
-  }
-  .role{
-    font-family:var(--mono); color:var(--amber);
-    font-size:clamp(14px,2vw,18px);
-    margin-bottom:26px; letter-spacing:0.01em;
-  }
-  .profile-text{
-    max-width:640px; color:var(--text-dim); font-size:16px; margin-bottom:34px;
-  }
-  .status-row{
-    display:flex; align-items:center; gap:10px; margin-bottom:36px;
-    font-family:var(--mono); font-size:13px; color:var(--text-dim);
-  }
-  .status-dot{
-    width:9px; height:9px; border-radius:50%; background:var(--teal);
-    box-shadow:0 0 0 4px var(--teal-dim);
-    animation:pulse 2.2s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.4;}}
-  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
-  .btn{
-    font-family:var(--mono); font-size:13px; padding:12px 20px;
-    border-radius:var(--radius); text-decoration:none; display:inline-block;
-    border:1px solid var(--border); transition:all .15s ease;
-  }
-  .btn-primary{background:var(--teal); color:#06231E; border-color:var(--teal); font-weight:600;}
-  .btn-primary:hover{background:#7FF3DE;}
-  .btn-ghost{color:var(--text); }
-  .btn-ghost:hover{border-color:var(--amber); color:var(--amber);}
+/* ===== Boutons ===== */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 22px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;cursor:pointer;border:2px solid var(--ink);font-family:var(--body);transition:transform .15s,background .2s,color .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--ink);color:var(--paper)}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn-orange{background:var(--orange);border-color:var(--orange);color:#fff}
 
-  /* SECTION SHARED */
-  section{padding:72px 0; border-bottom:1px solid var(--border);}
-  .eyebrow{
-    font-family:var(--mono); font-size:12px; color:var(--amber);
-    text-transform:uppercase; letter-spacing:0.12em; margin-bottom:10px;
-  }
-  h2.section-title{
-    font-family:var(--display); font-weight:600;
-    font-size:clamp(24px,3.4vw,32px); margin-bottom:34px;
-  }
+/* ===== Hero ===== */
+.hero{padding:64px 0 40px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;align-items:center}
+.status{display:inline-flex;align-items:center;gap:10px;padding:6px 14px 6px 10px;border:1px solid var(--rule);border-radius:999px;background:var(--surface);font-weight:600;font-size:14px;color:var(--muted)}
+.led{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 22%,transparent);animation:blink 2.4s infinite}
+@keyframes blink{50%{opacity:.35}}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(42px,6.4vw,78px);line-height:.98;letter-spacing:-.01em;margin:22px 0 18px}
+.hero h1 small{display:block;font-size:.36em;font-weight:600;color:var(--muted);letter-spacing:0;margin-bottom:10px}
+.role{font-family:var(--display);font-size:clamp(20px,2.4vw,26px);font-weight:600;margin-bottom:16px}
+.role span{display:inline-block;padding:0 6px;border-radius:6px;margin-right:4px}
+.r1{background:color-mix(in srgb,var(--blue) 16%,transparent)}
+.r2{background:color-mix(in srgb,var(--orange) 18%,transparent)}
+.r3{background:color-mix(in srgb,var(--red) 16%,transparent)}
+.lead{color:var(--muted);max-width:52ch;margin-bottom:28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
 
-  /* PROFIL */
-  .profil-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:40px;}
-  .profil-grid p{color:var(--text-dim); font-size:15.5px; margin-bottom:14px;}
-  .info-card{
-    background:var(--bg-panel); border:1px solid var(--border);
-    border-radius:var(--radius); padding:22px;
-    font-family:var(--mono); font-size:13px;
-  }
-  .info-card dt{color:var(--text-dim); margin-top:12px;}
-  .info-card dt:first-child{margin-top:0;}
-  .info-card dd{color:var(--text); margin-bottom:2px;}
+.topo-card{position:relative;background:var(--surface);border:1px solid var(--rule);border-radius:22px;padding:14px;box-shadow:var(--shadow)}
+.topo-head{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted);padding:4px 8px 8px}
+.topo-head b{color:var(--green);font-weight:600}
+#topo{width:100%;height:auto}
+#topo .link{stroke-width:3;fill:none;stroke-linecap:round}
+#topo .node{cursor:pointer}
+#topo .node rect{fill:var(--surface);stroke:var(--rule);stroke-width:2;transition:stroke .2s}
+#topo .node:hover rect,#topo .node:focus rect{stroke:var(--ink)}
+#topo .node text{font-family:var(--body);font-size:13px;font-weight:700;fill:var(--ink)}
+#topo .node .sub{font-size:11px;font-weight:500;fill:var(--muted)}
+#topo .core circle.ring{fill:none;stroke:var(--orange);stroke-width:2;opacity:.5;transform-origin:260px 210px;animation:pulse 3s infinite}
+@keyframes pulse{from{transform:scale(1);opacity:.6}to{transform:scale(1.9);opacity:0}}
+.topo-hint{font-size:13px;color:var(--muted);text-align:center;padding:4px 0 2px}
 
-  /* COMPETENCES */
-  .skills-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px;}
-  .skill-block{
-    background:var(--bg-panel); border:1px solid var(--border);
-    border-radius:var(--radius); padding:20px;
-  }
-  .skill-block h3{
-    font-family:var(--mono); font-size:12.5px; color:var(--teal);
-    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;
-    display:flex; align-items:center; gap:8px;
-  }
-  .skill-block h3::before{content:"›"; color:var(--amber);}
-  .pill-row{display:flex; flex-wrap:wrap; gap:8px;}
-  .pill{
-    font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
-    border:1px solid var(--border); border-radius:6px; padding:5px 9px;
-  }
+/* ===== Sections ===== */
+section{padding:72px 0}
+.sec-head{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:36px}
+.sec-head h2{font-family:var(--display);font-size:clamp(32px,4vw,46px);line-height:1.05;font-weight:700}
+.sec-head p{color:var(--muted);max-width:46ch}
 
-  /* EXPERIENCES */
-  .timeline{position:relative; padding-left:26px;}
-  .timeline::before{
-    content:""; position:absolute; left:5px; top:6px; bottom:6px; width:1px;
-    background:var(--border);
-  }
-  .tl-item{position:relative; margin-bottom:38px;}
-  .tl-item:last-child{margin-bottom:0;}
-  .tl-item::before{
-    content:""; position:absolute; left:-26px; top:5px; width:11px; height:11px;
-    border-radius:50%; background:var(--bg); border:2px solid var(--amber);
-  }
-  .tl-meta{
-    font-family:var(--mono); font-size:12px; color:var(--amber); margin-bottom:6px;
-  }
-  .tl-item h3{font-family:var(--display); font-size:18px; margin-bottom:4px; font-weight:600;}
-  .tl-item .tl-org{color:var(--text-dim); font-size:13.5px; margin-bottom:10px;}
-  .tl-item ul{padding-left:18px; color:var(--text-dim); font-size:14.5px;}
-  .tl-item li{margin-bottom:5px;}
+/* Chiffres */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--rule);border-radius:20px;background:var(--surface);overflow:hidden}
+.metric{padding:28px 24px;border-right:1px solid var(--rule)}
+.metric:last-child{border-right:0}
+.metric .n{font-family:var(--display);font-size:clamp(40px,5vw,56px);font-weight:700;line-height:1}
+.metric .n.o{color:var(--orange)} .metric .n.b{color:var(--blue)} .metric .n.g{color:var(--green)} .metric .n.r{color:var(--red)}
+.metric p{color:var(--muted);font-size:15px;margin-top:8px}
+@media (max-width:760px){.metrics{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--rule)}}
 
-  /* PROJETS */
-  .project-card{
-    background:var(--bg-panel); border:1px solid var(--border);
-    border-radius:var(--radius); padding:26px; margin-bottom:24px;
-  }
-  .project-card h3{font-family:var(--display); font-size:19px; margin-bottom:6px;}
-  .project-card .p-desc{color:var(--text-dim); font-size:14.5px; margin-bottom:18px; max-width:680px;}
-  .qos-bars{display:flex; flex-direction:column; gap:8px; max-width:420px;}
-  .qos-row{display:flex; align-items:center; gap:12px; font-family:var(--mono); font-size:12px;}
-  .qos-label{width:110px; color:var(--text-dim); flex-shrink:0;}
-  .qos-track{flex:1; height:8px; background:var(--bg-panel-2); border-radius:4px; overflow:hidden;}
-  .qos-fill{height:100%; border-radius:4px;}
-  .qos-fill.voice{width:90%; background:var(--teal);}
-  .qos-fill.video{width:65%; background:#4DD0E1;}
-  .qos-fill.data{width:35%; background:var(--amber);}
+/* Parcours */
+.about{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px}
+.about-text p{margin-bottom:16px;max-width:60ch}
+.about-text p:first-child{font-size:20px;font-weight:600}
+.edu{margin-top:24px;display:grid;gap:12px}
+.edu div{border-left:4px solid var(--blue);padding:6px 0 6px 16px}
+.edu div.now{border-color:var(--red)}
+.edu b{display:block;font-family:var(--display);font-size:18px}
+.edu span{color:var(--muted);font-size:15px}
+.timeline{list-style:none;position:relative;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:9px;top:8px;bottom:8px;width:3px;border-radius:2px;background:linear-gradient(var(--orange),var(--blue))}
+.job{position:relative;background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:22px 24px;margin-bottom:22px}
+.job::before{content:"";position:absolute;left:-32px;top:26px;width:15px;height:15px;border-radius:50%;background:var(--paper);border:3px solid var(--orange)}
+.job.moov::before{border-color:var(--blue)}
+.job .when{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.job h3{font-family:var(--display);font-size:22px;line-height:1.2;margin:4px 0 2px}
+.job .org{font-weight:700;color:var(--orange);margin-bottom:12px}
+.job.moov .org{color:var(--blue)}
+.job ul{list-style:none;display:grid;gap:7px}
+.job li{padding-left:22px;position:relative;font-size:16px}
+.job li::before{content:"";position:absolute;left:2px;top:10px;width:9px;height:9px;border-radius:2px;background:var(--rule)}
+@media (max-width:900px){.about{grid-template-columns:1fr;gap:36px}}
 
-  /* VLSM VISUALIZER */
-  .vlsm-legend{
-    font-family:var(--mono); font-size:12.5px; color:var(--text-dim); margin-bottom:16px;
-  }
-  .vlsm-legend b{color:var(--teal);}
-  .vlsm-bar{
-    display:flex; width:100%; height:52px; border-radius:8px; overflow:hidden;
-    border:1px solid var(--border); margin-bottom:18px;
-  }
-  .vlsm-seg{
-    height:100%; cursor:pointer; border-right:1px solid var(--bg);
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--mono); font-size:10.5px; color:#06231E; font-weight:600;
-    transition:filter .15s ease, transform .15s ease;
-    overflow:hidden; white-space:nowrap;
-  }
-  .vlsm-seg:last-child{border-right:none;}
-  .vlsm-seg:hover, .vlsm-seg.active{filter:brightness(1.15); transform:scaleY(1.06);}
-  .vlsm-seg.c1{background:var(--teal);}
-  .vlsm-seg.c2{background:var(--amber);}
-  .vlsm-seg.reserve{background:var(--bg-panel-2); color:var(--text-dim); border:1px dashed var(--border);}
-  .vlsm-detail{
-    background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius);
-    padding:18px 22px; font-family:var(--mono); font-size:13px;
-  }
-  .vlsm-detail .vd-title{color:var(--teal); font-size:14px; margin-bottom:12px; font-weight:600;}
-  .vd-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px 20px;}
-  .vd-grid div span{display:block; color:var(--text-dim); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px;}
-  .vlsm-hint{font-family:var(--mono); font-size:11.5px; color:var(--text-dim); margin-top:10px;}
+/* Projets */
+.projects{display:grid;gap:18px}
+.proj{background:var(--surface);border:1px solid var(--rule);border-radius:20px;overflow:hidden;display:grid;grid-template-columns:200px 1fr}
+.proj-side{padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;color:#fff}
+.proj-side .pk{font-family:var(--mono);font-size:13px;opacity:.85}
+.proj-side svg{width:64px;height:64px;opacity:.95}
+.proj.p1 .proj-side{background:var(--blue)} .proj.p2 .proj-side{background:var(--ink)} .proj.p3 .proj-side{background:var(--orange)} .proj.p4 .proj-side{background:var(--green)} .proj.p5 .proj-side{background:var(--brown)}
+.proj.p2 .proj-side{color:var(--paper)}
+.proj-main{padding:24px 28px}
+.proj-main h3{font-family:var(--display);font-size:24px;line-height:1.2;margin-bottom:8px}
+.proj-main > p{color:var(--muted);max-width:68ch}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.tag{font-family:var(--mono);font-size:12.5px;padding:3px 10px;border-radius:6px;border:1px solid var(--rule);background:var(--paper)}
+.proj-toggle{background:none;border:0;font:inherit;font-weight:700;color:var(--ink);cursor:pointer;padding:6px 0;display:inline-flex;align-items:center;gap:8px;border-bottom:2px solid var(--orange)}
+.proj-toggle svg{width:16px;height:16px;transition:transform .25s}
+.proj-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}
+.case{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px;max-height:0;overflow:hidden;transition:max-height .45s ease}
+.case.open{max-height:900px}
+.case h4{font-family:var(--display);font-size:16px;margin-bottom:6px}
+.case p{font-size:15.5px;color:var(--muted)}
+@media (max-width:760px){.proj{grid-template-columns:1fr}.proj-side{flex-direction:row;align-items:center}.proj-side svg{width:44px;height:44px}.case{grid-template-columns:1fr}}
 
-  /* FLOW DIAGRAM */
-  .flow-diagram{
-    display:flex; align-items:center; gap:0; overflow-x:auto;
-    padding:20px 4px 26px; margin-bottom:6px;
-  }
-  .flow-node{
-    flex-shrink:0; width:118px; height:118px; border-radius:12px;
-    background:var(--bg-panel-2); border:1px solid var(--border);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding:10px; cursor:pointer;
-    font-family:var(--mono); font-size:11px; color:var(--text-dim);
-    transition:all .15s ease;
-  }
-  .flow-node .fn-icon{font-size:20px; margin-bottom:8px;}
-  .flow-node:hover, .flow-node.active{
-    border-color:var(--teal); color:var(--text); background:var(--teal-dim);
-  }
-  .flow-arrow{
-    flex-shrink:0; width:34px; height:2px; background:var(--border); position:relative;
-  }
-  .flow-arrow::after{
-    content:""; position:absolute; right:-1px; top:-4px;
-    border:5px solid transparent; border-left-color:var(--border);
-  }
+/* Compétences : façon panneau de brassage */
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:20px;padding:10px}
+.row{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:center;padding:16px;border-bottom:1px dashed var(--rule)}
+.row:last-child{border-bottom:0}
+.row h3{font-family:var(--display);font-size:19px;display:flex;align-items:center;gap:10px}
+.row h3 i{width:14px;height:14px;border-radius:3px;display:inline-block}
+.ports{display:flex;flex-wrap:wrap;gap:8px}
+.port{display:inline-flex;align-items:center;gap:8px;padding:7px 12px 7px 9px;border-radius:8px;background:var(--paper);border:1px solid var(--rule);font-weight:600;font-size:15px}
+.port::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 6px var(--c)}
+@media (max-width:700px){.row{grid-template-columns:1fr;gap:10px}}
 
-  /* FORMATION */
-  .edu-item{margin-bottom:20px;}
-  .edu-item .edu-year{font-family:var(--mono); color:var(--amber); font-size:12.5px;}
-  .edu-item h3{font-family:var(--display); font-size:17px; margin:4px 0 2px;}
-  .edu-item p{color:var(--text-dim); font-size:14px;}
+/* Console + quiz */
+.play{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+@media (max-width:960px){.play{grid-template-columns:1fr}}
+.term{background:var(--term-bg);color:var(--term-ink);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);font-family:var(--mono);font-size:14px}
+.term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:rgba(255,255,255,.05);font-size:12.5px;color:#8FA3B5}
+.term-bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.term-body{height:400px;overflow-y:auto;padding:16px;line-height:1.55}
+.term-body .ok{color:#5FD38F} .term-body .k{color:#F2A06A} .term-body .c{color:#7DB4F5} .term-body .m{color:#8FA3B5}
+.term-line{white-space:pre-wrap;word-break:break-word}
+.term-input{display:flex;gap:8px;align-items:center}
+.term-input input{flex:1;min-width:0;background:transparent;border:0;color:inherit;font:inherit;outline:none;caret-color:#F2A06A}
+.term-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 16px}
+.term-chips button{font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:transparent;color:#C9D6E1;cursor:pointer}
+.term-chips button:hover{background:rgba(255,255,255,.08)}
 
-  /* CONTACT */
-  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:32px;}
-  .contact-card{
-    background:var(--bg-panel); border:1px solid var(--border); border-radius:var(--radius);
-    padding:24px;
-  }
-  .contact-card h3{font-family:var(--mono); font-size:12.5px; color:var(--teal); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px;}
-  .contact-line{display:flex; gap:10px; font-size:14.5px; margin-bottom:10px; color:var(--text-dim);}
-  .contact-line b{color:var(--text); font-weight:500;}
+.quiz{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:26px;box-shadow:var(--shadow)}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.quiz-top h3{font-family:var(--display);font-size:22px}
+.qcount{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.qbar{height:6px;border-radius:3px;background:var(--rule);overflow:hidden;margin-bottom:22px}
+.qbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--blue));transition:width .4s}
+.qq{font-size:19px;font-weight:700;margin-bottom:16px}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:13px 16px;border-radius:12px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);font:inherit;font-weight:600;cursor:pointer;transition:border-color .15s,transform .15s}
+.opt:hover:not(:disabled){border-color:var(--blue);transform:translateX(3px)}
+.opt.good{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,var(--paper))}
+.opt.bad{border-color:var(--red);background:color-mix(in srgb,var(--red) 12%,var(--paper));animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.qexp{margin-top:16px;padding:14px 16px;border-radius:12px;background:var(--paper);border-left:4px solid var(--blue);font-size:15.5px;display:none}
+.qexp.show{display:block}
+.qnav{margin-top:18px;display:flex;justify-content:flex-end}
+.qend{text-align:center;padding:10px 0}
+.qend .big{font-family:var(--display);font-size:64px;font-weight:700;line-height:1}
+.qend p{color:var(--muted);margin:10px auto 20px;max-width:40ch}
+.confetti{position:fixed;top:-12px;width:10px;height:14px;z-index:300;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 
-  footer{
-    padding:34px 0; text-align:center; font-family:var(--mono);
-    font-size:12px; color:var(--text-dim);
-  }
+/* Contact */
+.contact{background:var(--ink);color:var(--paper);border-radius:28px;padding:56px 48px;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.contact h2{font-family:var(--display);font-size:clamp(32px,4.4vw,52px);line-height:1.05}
+.contact p{opacity:.8;margin-top:14px;max-width:44ch}
+.clinks{display:grid;gap:10px}
+.clinks a{display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:14px;background:rgba(255,255,255,.07);text-decoration:none;font-weight:600;transition:background .2s}
+.clinks a:hover{background:rgba(255,255,255,.14)}
+.clinks svg{width:22px;height:22px;flex:none}
+.clinks small{display:block;font-weight:500;opacity:.65;font-size:13px}
+@media (max-width:860px){.contact{grid-template-columns:1fr;padding:40px 24px}}
+footer{padding:36px 0 48px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
-  @media (max-width:760px){
-    .wrap{padding:0 18px;}
-    .nav-inner{padding:14px 18px; flex-direction:column; align-items:flex-start; gap:10px;}
-    .nav-links{gap:12px 16px; width:100%;}
-    .hero{padding:56px 0 44px;}
-    .prompt{font-size:12px;}
-    h1.name{font-size:clamp(28px,8vw,38px);}
-    .role{font-size:14px; margin-bottom:20px;}
-    .profile-text{font-size:14.5px; margin-bottom:26px;}
-    .status-row{font-size:12px; margin-bottom:26px;}
-    .cta-row{flex-direction:column; align-items:stretch;}
-    .btn{text-align:center;}
-    section{padding:48px 0;}
-    h2.section-title{font-size:22px; margin-bottom:24px;}
-    .profil-grid, .contact-grid{grid-template-columns:1fr; gap:24px;}
-    .skills-grid{grid-template-columns:1fr;}
-    .skill-block{padding:16px;}
-    .timeline{padding-left:20px;}
-    .tl-item::before{left:-20px;}
-    .tl-item h3{font-size:16.5px;}
-    .tl-item ul{padding-left:16px; font-size:13.5px;}
-    .project-card{padding:18px;}
-    .vlsm-bar{height:auto; flex-wrap:wrap;}
-    .vlsm-seg{width:auto !important; flex:1 1 45%; min-width:80px; height:44px; font-size:9.5px; padding:4px; text-align:center; white-space:normal; line-height:1.15;}
-    .vd-grid{grid-template-columns:1fr 1fr; gap:10px 14px;}
-    .flow-diagram{padding:16px 2px 20px;}
-    .flow-node{width:96px; height:96px; font-size:10px;}
-    .flow-node .fn-icon{font-size:17px; margin-bottom:6px;}
-    .flow-arrow{width:20px;}
-    .contact-card{padding:18px;}
-  }
-  @media (max-width:420px){
-    .vlsm-seg{flex:1 1 100%;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{animation:none !important; transition:none !important;}
-  }
+/* Hero responsive */
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.hero{padding-top:36px}}
+
+/* Apparition au défilement (une seule fois, discrète) */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+
+/* ===== Visite guidée ===== */
+.tour-spot{position:fixed;z-index:120;border-radius:16px;box-shadow:0 0 0 9999px rgba(8,14,22,.72);pointer-events:none;transition:all .35s ease;outline:3px solid var(--orange)}
+.tour-tip{position:fixed;z-index:121;width:min(360px,calc(100vw - 32px));background:var(--surface);color:var(--ink);border-radius:16px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.35);border:1px solid var(--rule);transition:top .35s,left .35s}
+.tour-tip .step{font-family:var(--mono);font-size:12px;color:var(--orange);font-weight:600}
+.tour-tip h4{font-family:var(--display);font-size:21px;margin:4px 0 6px}
+.tour-tip p{font-size:15.5px;color:var(--muted)}
+.tour-dots{display:flex;gap:5px;margin:14px 0}
+.tour-dots i{width:7px;height:7px;border-radius:50%;background:var(--rule)}
+.tour-dots i.on{background:var(--orange);width:18px;border-radius:4px}
+.tour-btns{display:flex;gap:8px;justify-content:space-between;align-items:center}
+.tour-btns .btn{padding:9px 16px;font-size:14px}
+.tour-skip{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;text-decoration:underline}
+.tour-hidden{display:none}
+@media (max-width:640px){.tour-tip{left:16px!important;right:16px;bottom:16px;top:auto!important;width:auto}}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--paper);padding:14px 20px;border-radius:14px;z-index:90;display:flex;gap:14px;align-items:center;box-shadow:var(--shadow);transition:transform .4s;width:max-content;max-width:calc(100vw - 32px)}
+.toast.show{transform:translateX(-50%)}
+.toast button{border:0;background:var(--orange);color:#fff;font:inherit;font-weight:700;padding:7px 14px;border-radius:9px;cursor:pointer}
+.toast .x{background:none;color:var(--paper);opacity:.7;padding:4px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Aller au contenu</a>
 
-<header class="site-nav">
-  <div class="nav-inner">
-    <div class="nav-brand">baka@reseau:~$</div>
-    <ul class="nav-links">
-      <li><a href="#profil">~/profil</a></li>
-      <li><a href="#competences">~/competences</a></li>
-      <li><a href="#experiences">~/experiences</a></li>
-      <li><a href="#projets">~/projets</a></li>
-      <li><a href="#formation">~/formation</a></li>
-      <li><a href="#contact">~/contact</a></li>
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="brand" aria-label="Accueil">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="currentColor"/><circle cx="32" cy="32" r="9" fill="#E0702A"/><path d="M32 32L14 16M32 32L50 16M32 32V52" stroke="#8FB4E6" stroke-width="3"/><circle cx="14" cy="16" r="5" fill="#2369C9"/><circle cx="50" cy="16" r="5" fill="#2E9A5B"/><circle cx="32" cy="52" r="5" fill="#2369C9"/></svg>
+      Amen BAKA
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#parcours">Parcours</a></li>
+      <li><a href="#projets">Projets</a></li>
+      <li><a href="#competences">Compétences</a></li>
+      <li><a href="#jouer">Console & quiz</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
+    <div class="nav-actions">
+      <button class="icon-btn" id="tourBtn" aria-label="Lancer la visite guidée" title="Visite guidée">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
+      </button>
+      <button class="icon-btn" id="themeBtn" aria-label="Changer de thème" title="Thème clair / sombre">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
   </div>
 </header>
 
-<section class="hero" id="accueil">
-  <div class="wrap hero-inner">
-    <div class="prompt"><span>root@baka:~$</span><span class="prompt-typed" id="typed"></span><span class="caret"></span></div>
-    <h1 class="name">BAKA Essoham Exaucé Amen</h1>
-    <div class="role">Technicien Réseau &amp; Sécurité Informatique</div>
-    <p class="profile-text">Diplômé en Réseaux et Sécurité Informatique, je conçois, déploie et sécurise des infrastructures réseau — de l'adressage IP au routage, en passant par la virtualisation et le pare-feu. Rigoureux, curieux, et à l'aise aussi bien en salle serveur qu'en ligne de commande.</p>
-    <div class="status-row"><span class="status-dot"></span> Statut : disponible pour stage ou premier emploi — Lomé, Togo</div>
-    <div class="cta-row">
-      <a class="btn btn-primary" href="#projets">Voir les projets</a>
-      <a class="btn btn-ghost" href="#contact">Me contacter</a>
-    </div>
-  </div>
-</section>
-
-<section id="profil">
-  <div class="wrap profil-grid">
-    <div>
-      <div class="eyebrow">Profil</div>
-      <h2 class="section-title">Qui suis-je</h2>
-      <p>Diplômé en Réseaux et Sécurité Informatique, motivé et rigoureux, je dispose de solides bases en administration systèmes et réseaux, sécurité informatique et services réseaux.</p>
-      <p>Capable de travailler en équipe, d'apprendre rapidement et de m'adapter à des environnements techniques variés, je suis à la recherche d'un stage ou d'un premier emploi afin de mettre mes compétences en pratique et évoluer professionnellement.</p>
-      <p style="color:var(--text-dim); font-size:13.5px; margin-top:20px;">Loisirs : natation · billard · voyage · réseau &nbsp;|&nbsp; Langues : Français (natif), Anglais technique / intermédiaire</p>
-    </div>
-    <div class="info-card">
-      <dl>
-        <dt>localisation</dt><dd>Totsi – Gbinkomé, Togo</dd>
-        <dt>permis</dt><dd>Oui</dd>
-        <dt>disponibilité</dt><dd>Stage / premier emploi</dd>
-        <dt>qualités</dt><dd>Ponctualité · esprit d'équipe · débrouillard</dd>
-      </dl>
-    </div>
-  </div>
-</section>
-
-<section id="competences">
+<main id="main">
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
   <div class="wrap">
-    <div class="eyebrow">Compétences</div>
-    <h2 class="section-title">Stack technique</h2>
-    <div class="skills-grid">
-      <div class="skill-block">
-        <h3>Réseaux</h3>
-        <div class="pill-row">
-          <span class="pill">LAN/WAN</span><span class="pill">TCP/IP</span><span class="pill">VLAN</span>
-          <span class="pill">Routage &amp; Switching (Cisco)</span><span class="pill">OSPF</span>
-          <span class="pill">DNS</span><span class="pill">DHCP</span><span class="pill">NAT</span>
-          <span class="pill">QoS</span><span class="pill">Nagios</span>
-        </div>
+    <div id="heroText">
+      <span class="status"><span class="led"></span>Ouvert aux opportunités à Lomé et à distance</span>
+      <h1><small>BAKA Essoham Exaucé</small>Amen</h1>
+      <p class="role"><span class="r1">Systèmes</span> <span class="r2">Réseaux</span> <span class="r3">Sécurité</span></p>
+      <p class="lead">Je déploie, supervise et dépanne des réseaux sur le terrain : antennes, liaisons point-à-point, WiFi public et privé, QoS et observabilité. Actuellement en master cybersécurité.</p>
+      <div class="cta">
+        <a href="#projets" class="btn btn-primary">Voir mes projets</a>
+        <button class="btn btn-ghost" id="heroTour">Visite guidée</button>
       </div>
-      <div class="skill-block">
-        <h3>Systèmes</h3>
-        <div class="pill-row">
-          <span class="pill">Windows Server 2016/2019/2022</span><span class="pill">Linux (Ubuntu/Debian)</span>
-          <span class="pill">Active Directory</span><span class="pill">GPO</span><span class="pill">RDP</span>
-          <span class="pill">OpenWrt</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <h3>Sécurité</h3>
-        <div class="pill-row">
-          <span class="pill">Gestion des accès</span><span class="pill">Politiques de sécurité</span>
-          <span class="pill">Sauvegardes</span><span class="pill">Pare-feu</span><span class="pill">PfSense</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <h3>Virtualisation &amp; Cloud</h3>
-        <div class="pill-row">
-          <span class="pill">VMware</span><span class="pill">VirtualBox</span><span class="pill">Citrix</span>
-          <span class="pill">AWS (EC2, S3)</span><span class="pill">Google Cloud</span>
-        </div>
-      </div>
-      <div class="skill-block">
-        <h3>DevOps &amp; Outils</h3>
-        <div class="pill-row">
-          <span class="pill">Docker</span><span class="pill">Git / GitHub</span><span class="pill">Nginx</span>
-          <span class="pill">VS Code</span><span class="pill">Packet Tracer / EVE-NG / GNS3</span>
-        </div>
-      </div>
+    </div>
+
+    <div class="topo-card" id="topoCard">
+      <div class="topo-head"><span>topologie / parcours</span><span>état : <b>tous les liens actifs</b></span></div>
+      <svg id="topo" viewBox="0 0 520 420" role="img" aria-label="Schéma de mon parcours sous forme de réseau : formation, stages et labs reliés à moi au centre">
+        <defs>
+          <path id="l1" d="M260 210 L105 85"/>
+          <path id="l2" d="M260 210 L415 85"/>
+          <path id="l3" d="M260 210 L105 335"/>
+          <path id="l4" d="M260 210 L415 335"/>
+          <path id="l5" d="M260 210 L260 375"/>
+          <path id="l6" d="M260 210 L260 45"/>
+        </defs>
+        <use href="#l1" class="link" style="stroke:var(--orange)"/>
+        <use href="#l2" class="link" style="stroke:var(--blue)"/>
+        <use href="#l3" class="link" style="stroke:var(--green)"/>
+        <use href="#l4" class="link" style="stroke:var(--brown)"/>
+        <use href="#l5" class="link" style="stroke:var(--red)"/>
+        <use href="#l6" class="link" style="stroke:var(--muted)" stroke-dasharray="6 7"/>
+
+        <!-- paquets -->
+        <circle r="5" fill="var(--orange)"><animateMotion dur="2.6s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#l1"/></animateMotion></circle>
+        <circle r="5" fill="var(--blue)"><animateMotion dur="3.1s" begin=".4s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#l2"/></animateMotion></circle>
+        <circle r="5" fill="var(--green)"><animateMotion dur="2.9s" begin=".9s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#l3"/></animateMotion></circle>
+        <circle r="5" fill="var(--brown)"><animateMotion dur="3.4s" begin=".2s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#l4"/></animateMotion></circle>
+        <circle r="5" fill="var(--red)"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#l5"/></animateMotion></circle>
+        <circle r="4" fill="var(--muted)"><animateMotion dur="3.8s" begin=".6s" repeatCount="indefinite"><mpath href="#l6"/></animateMotion></circle>
+
+        <g class="core">
+          <circle class="ring" cx="260" cy="210" r="38"/>
+          <circle cx="260" cy="210" r="38" fill="var(--ink)"/>
+          <text x="260" y="217" text-anchor="middle" style="font-family:var(--display);font-weight:700;font-size:22px;fill:var(--paper)">Amen</text>
+        </g>
+
+        <g class="node" data-go="#parcours" tabindex="0" role="link" aria-label="Melchior Boot, technicien réseau">
+          <rect x="30" y="58" width="150" height="54" rx="12"/>
+          <text x="105" y="81" text-anchor="middle">Melchior Boot</text>
+          <text x="105" y="99" text-anchor="middle" class="sub">Technicien réseau</text>
+        </g>
+        <g class="node" data-go="#parcours" tabindex="0" role="link" aria-label="Moov Africa Togo, réseaux et systèmes">
+          <rect x="340" y="58" width="150" height="54" rx="12"/>
+          <text x="415" y="81" text-anchor="middle">Moov Africa Togo</text>
+          <text x="415" y="99" text-anchor="middle" class="sub">Réseaux &amp; systèmes</text>
+        </g>
+        <g class="node" data-go="#p-ad" tabindex="0" role="link" aria-label="Lab Active Directory">
+          <rect x="30" y="308" width="150" height="54" rx="12"/>
+          <text x="105" y="331" text-anchor="middle">Lab Active Directory</text>
+          <text x="105" y="349" text-anchor="middle" class="sub">DNS · DHCP · DC</text>
+        </g>
+        <g class="node" data-go="#p-pfsense" tabindex="0" role="link" aria-label="Lab pfSense">
+          <rect x="340" y="308" width="150" height="54" rx="12"/>
+          <text x="415" y="331" text-anchor="middle">Lab pfSense</text>
+          <text x="415" y="349" text-anchor="middle" class="sub">Firewall · QoS</text>
+        </g>
+        <g class="node" data-go="#parcours" tabindex="0" role="link" aria-label="Master cybersécurité en cours">
+          <rect x="185" y="352" width="150" height="54" rx="12"/>
+          <text x="260" y="375" text-anchor="middle">Master cybersécurité</text>
+          <text x="260" y="393" text-anchor="middle" class="sub">En cours</text>
+        </g>
+        <g class="node" data-go="#parcours" tabindex="0" role="link" aria-label="Licence réseau et sécurité, mention bien">
+          <rect x="185" y="14" width="150" height="54" rx="12"/>
+          <text x="260" y="37" text-anchor="middle">Licence réseau &amp; sécu</text>
+          <text x="260" y="55" text-anchor="middle" class="sub">Mention bien, 2025</text>
+        </g>
+      </svg>
+      <p class="topo-hint">Clique sur un nœud pour aller à la section correspondante.</p>
     </div>
   </div>
 </section>
 
-<section id="experiences">
+<!-- ===== CHIFFRES ===== -->
+<section id="chiffres" style="padding-top:20px">
   <div class="wrap">
-    <div class="eyebrow">Expériences</div>
-    <h2 class="section-title">Parcours professionnel</h2>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-meta">2026 · 3 mois</div>
-        <h3>Stage — Direction Technique Télessou</h3>
-        <div class="tl-org">Moov Africa Togo</div>
-        <ul>
-          <li>Conception d'un plan d'adressage IP optimisé (VLSM) pour un réseau d'entreprise multi-sites</li>
-          <li>Modélisation de l'architecture réseau sous simulateur (Packet Tracer / EVE-NG / GNS3)</li>
-          <li>Configuration du routage OSPF sur l'ensemble des routeurs</li>
-          <li>Déploiement des VLAN et du DHCP par équipement, avec nomenclature dédiée</li>
-          <li>Mise en place du NAT sur le routeur de sortie Internet</li>
-          <li>Configuration de liaisons point-à-point sur équipements Ubiquiti airMAX M5</li>
-          <li>Câblage réseau en salle serveur</li>
-          <li>Assistance technique lors du rackage d'un serveur</li>
-        </ul>
-      </div>
-      <div class="tl-item">
-        <div class="tl-meta">Juin – Octobre 2025</div>
-        <h3>Stage technicien réseau</h3>
-        <div class="tl-org">Melchior Boot</div>
-        <ul>
-          <li>200+ interventions de dépannage sur équipements réseau</li>
-          <li>Installation et configuration de réseaux Wi-Fi publics et privés</li>
-          <li>Gestion autonome du matériel et du local technique (30+ clients)</li>
-          <li>Maintenance et optimisation des performances réseau</li>
-          <li>Déploiement d'une solution de supervision des utilisateurs MikroTik via MikHmon, hébergée sur le cloud</li>
-          <li>Mise en place d'un accès distant sécurisé par VPN WireGuard vers une instance AWS EC2</li>
-          <li>Configuration d'un système d'alerte AWS CloudWatch pour surveiller la disponibilité du service</li>
-        </ul>
-      </div>
+    <div class="metrics reveal">
+      <div class="metric"><div class="n o" data-count="15" data-suffix="+">0</div><p>réseaux WiFi installés, publics et privés</p></div>
+      <div class="metric"><div class="n b" data-count="50" data-suffix="+">0</div><p>interventions terrain et dépannages</p></div>
+      <div class="metric"><div class="n g" data-count="2">0</div><p>stages en entreprise, dont un opérateur télécom</p></div>
+      <div class="metric"><div class="n r" data-count="5">0</div><p>outils de supervision utilisés : Grafana, Prometheus, Loki, Nagios, MikHmon</p></div>
     </div>
   </div>
 </section>
 
+<!-- ===== PARCOURS ===== -->
+<section id="parcours">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Parcours</h2>
+      <p>Du terrain avec les antennes clients jusqu'à la supervision d'un réseau opérateur.</p>
+    </div>
+    <div class="about">
+      <div class="about-text reveal">
+        <p>Je suis administrateur systèmes, réseaux et sécurité, basé à Lomé.</p>
+        <p>Mon point fort, c'est le terrain : quand une antenne tombe ou qu'un client n'a plus de connexion, je diagnostique et je rétablis le service. J'aime aussi construire des labs pour comprendre en profondeur ce que je déploie : Active Directory, pfSense, supervision.</p>
+        <p>Aujourd'hui, je me spécialise en cybersécurité pour sécuriser les infrastructures que je sais déjà installer et maintenir.</p>
+        <div class="edu">
+          <div class="now"><b>Master cybersécurité</b><span>En cours</span></div>
+          <div><b>Licence réseau et sécurité informatique</b><span>Mention bien, Ascencia Keyce Togo, 2025</span></div>
+          <div style="border-color:var(--green)"><b>Langues</b><span>Français, anglais</span></div>
+        </div>
+      </div>
+      <ol class="timeline">
+        <li class="job moov reveal">
+          <span class="when">Mai 2026 à aujourd'hui</span>
+          <h3>Stagiaire réseaux et systèmes</h3>
+          <div class="org">Moov Africa Togo, Projet Excellence</div>
+          <ul>
+            <li>Mise en place d'une QoS pour prioriser certains flux de trafic sur OpenWrt</li>
+            <li>Supervision et observabilité avec Grafana, Prometheus et Loki</li>
+            <li>Suivi d'un projet de déploiement : rackage et câblage Ethernet et fibre (FC) de firewalls, switchs et serveurs</li>
+            <li>Configuration des interfaces iLO et mise en service des équipements</li>
+          </ul>
+        </li>
+        <li class="job reveal">
+          <span class="when">Juin à octobre 2025</span>
+          <h3>Technicien réseau (stage)</h3>
+          <div class="org">Melchior Boot</div>
+          <ul>
+            <li>Gestion et maintenance du réseau de l'entreprise</li>
+            <li>Monitoring de plusieurs sites et intervention dès qu'une antenne est signalée hors ligne</li>
+            <li>Dépannage des antennes chez les clients et configuration de liaisons point-à-point</li>
+            <li>Plus de 15 installations de réseaux WiFi privés et publics</li>
+            <li>Plus de 50 interventions sur le terrain</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROJETS ===== -->
 <section id="projets">
   <div class="wrap">
-    <div class="eyebrow">Projets</div>
-    <h2 class="section-title">Réalisations techniques</h2>
-
-    <div class="project-card">
-      <h3>Priorisation de trafic (QoS)</h3>
-      <p class="p-desc">Mise en place d'une politique de qualité de service pour prioriser les flux critiques — voix et vidéo — face au trafic de données classique, afin de garantir la bande passante et réduire la latence des services sensibles.</p>
-      <div class="qos-bars">
-        <div class="qos-row"><span class="qos-label">Voix (VoIP)</span><div class="qos-track"><div class="qos-fill voice"></div></div><span>Priorité haute</span></div>
-        <div class="qos-row"><span class="qos-label">Vidéo</span><div class="qos-track"><div class="qos-fill video"></div></div><span>Priorité moyenne</span></div>
-        <div class="qos-row"><span class="qos-label">Données</span><div class="qos-track"><div class="qos-fill data"></div></div><span>Best effort</span></div>
-      </div>
+    <div class="sec-head reveal">
+      <h2>Projets</h2>
+      <p>Chaque projet est présenté en trois temps : le besoin, ce que j'ai fait, ce que ça a apporté.</p>
     </div>
+    <div class="projects">
 
-    <div class="project-card">
-      <h3>Plan d'adressage IP — Moov Africa Togo</h3>
-      <p class="p-desc">Découpage en VLSM du bloc <b style="color:var(--teal)">192.168.4.0/22</b> pour couvrir l'ensemble d'un réseau d'entreprise multi-sites : utilisateurs filaires, téléphonie IP, Wi-Fi (Trusted / Guest), ferme de serveurs (production, préproduction, test), DMZ (entreprise / partenaires) et deux agences distantes. Cliquez sur un bloc pour voir le détail du sous-réseau.</p>
-      <div class="vlsm-legend">Bloc initial : <b>192.168.4.0/22</b> · 1024 adresses réparties en <b id="segcount">12</b> sous-réseaux</div>
-      <div class="vlsm-bar" id="vlsmBar"></div>
-      <div class="vlsm-detail" id="vlsmDetail">
-        <div class="vd-title">Sélectionnez un sous-réseau ci-dessus ↑</div>
-        <div class="vlsm-hint">Astuce : la largeur de chaque bloc est proportionnelle au nombre d'adresses allouées.</div>
-      </div>
-    </div>
+      <article class="proj p1 reveal" id="p-qos">
+        <div class="proj-side">
+          <span class="pk">Moov Africa Togo</span>
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M8 48h48M8 36h30M8 24h44M8 12h18"/><circle cx="44" cy="36" r="4" fill="currentColor"/></svg>
+        </div>
+        <div class="proj-main">
+          <h3>QoS et supervision du trafic</h3>
+          <p>Priorisation de flux critiques sur des routeurs OpenWrt, avec une stack d'observabilité pour mesurer l'effet des règles.</p>
+          <div class="tags"><span class="tag">OpenWrt</span><span class="tag">QoS</span><span class="tag">Grafana</span><span class="tag">Prometheus</span><span class="tag">Loki</span></div>
+          <button class="proj-toggle" aria-expanded="false">Voir l'étude de cas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="case">
+            <div><h4>Le besoin</h4><p>Certains flux devaient passer en priorité sur le réseau, même en période de charge.</p></div>
+            <div><h4>Ce que j'ai fait</h4><p>Classification des flux et règles de priorisation sur OpenWrt. Collecte des métriques avec Prometheus, des logs avec Loki, et tableaux de bord Grafana.</p></div>
+            <div><h4>Le résultat</h4><p>Les flux prioritaires sont servis en premier, et l'équipe voit en temps réel l'état du trafic et l'effet des règles.</p></div>
+          </div>
+        </div>
+      </article>
 
-    <div class="project-card">
-      <h3>Supervision &amp; accès distant sécurisé — MikroTik / AWS</h3>
-      <p class="p-desc">Solution de supervision des utilisateurs connectés aux routeurs MikroTik via <b style="color:var(--teal)">MikHmon</b>, déployée sur une instance <b style="color:var(--teal)">AWS EC2</b> et accessible à distance via un tunnel <b style="color:var(--teal)">VPN WireGuard</b>, avec un système d'alerte <b style="color:var(--teal)">CloudWatch</b> pour surveiller la disponibilité du service. Cliquez sur un maillon de la chaîne pour le détail.</p>
-      <div class="flow-diagram" id="flowDiagram"></div>
-      <div class="vlsm-detail" id="flowDetail">
-        <div class="vd-title">Sélectionnez un élément de la chaîne ci-dessus ↑</div>
-        <div class="vlsm-hint">La donnée circule de l'administrateur jusqu'aux routeurs MikroTik en passant par le tunnel chiffré et le cloud.</div>
-      </div>
+      <article class="proj p5 reveal" id="p-mikhmon">
+        <div class="proj-side">
+          <span class="pk">Supervision cloud</span>
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 46h30a10 10 0 000-20 14 14 0 00-27-3A11 11 0 0018 46z"/><path d="M26 38l5-6 5 4 6-8"/></svg>
+        </div>
+        <div class="proj-main">
+          <h3>Supervision des utilisateurs MikroTik dans le cloud</h3>
+          <p>MikHmon déployé dans le cloud pour suivre les utilisateurs hotspot MikroTik, avec un accès distant sécurisé.</p>
+          <div class="tags"><span class="tag">MikroTik</span><span class="tag">MikHmon</span><span class="tag">Cloud</span><span class="tag">Accès distant sécurisé</span></div>
+          <button class="proj-toggle" aria-expanded="false">Voir l'étude de cas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="case">
+            <div><h4>Le besoin</h4><p>Suivre les utilisateurs et les sessions hotspot sans devoir être sur place à côté du routeur.</p></div>
+            <div><h4>Ce que j'ai fait</h4><p>Déploiement de MikHmon dans le cloud, raccordement aux routeurs MikroTik et sécurisation de l'accès distant à l'interface.</p></div>
+            <div><h4>Le résultat</h4><p>La gestion et la supervision des utilisateurs se font à distance, depuis n'importe où.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj p2 reveal" id="p-ad">
+        <div class="proj-side">
+          <span class="pk">Lab personnel</span>
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><rect x="20" y="6" width="24" height="16" rx="3"/><rect x="4" y="42" width="20" height="14" rx="3"/><rect x="40" y="42" width="20" height="14" rx="3"/><path d="M32 22v10M14 42v-10h36v10"/></svg>
+        </div>
+        <div class="proj-main">
+          <h3>Lab Active Directory sous Windows Server</h3>
+          <p>Un domaine complet avec contrôleur de domaine, DNS, DHCP et postes clients Windows.</p>
+          <div class="tags"><span class="tag">Windows Server</span><span class="tag">AD DS</span><span class="tag">DNS</span><span class="tag">DHCP</span><span class="tag">GPO</span></div>
+          <button class="proj-toggle" aria-expanded="false">Voir l'étude de cas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="case">
+            <div><h4>Le besoin</h4><p>Reproduire l'infrastructure d'identité d'une entreprise pour la maîtriser de bout en bout.</p></div>
+            <div><h4>Ce que j'ai fait</h4><p>Promotion d'un contrôleur de domaine, zones DNS de recherche directe et inversée, étendue DHCP, création des comptes et jonction des postes Windows au domaine.</p></div>
+            <div><h4>Le résultat</h4><p>Un environnement fonctionnel où les utilisateurs s'authentifient sur le domaine et reçoivent automatiquement leur adressage.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj p3 reveal" id="p-pfsense">
+        <div class="proj-side">
+          <span class="pk">Lab personnel</span>
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M32 6l22 8v16c0 14-10 23-22 28C20 53 10 44 10 30V14z"/><path d="M22 32l7 7 13-14" stroke-linecap="round"/></svg>
+        </div>
+        <div class="proj-main">
+          <h3>Lab réseau pfSense sous VMware</h3>
+          <p>pfSense comme routeur et pare-feu central, avec traffic shaping et une stack de supervision sous Docker.</p>
+          <div class="tags"><span class="tag">pfSense</span><span class="tag">VMware</span><span class="tag">Traffic shaping</span><span class="tag">Docker</span></div>
+          <button class="proj-toggle" aria-expanded="false">Voir l'étude de cas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="case">
+            <div><h4>Le besoin</h4><p>Un environnement sûr pour tester le filtrage, le routage et la gestion de la bande passante.</p></div>
+            <div><h4>Ce que j'ai fait</h4><p>Segmentation du lab derrière pfSense, règles de pare-feu, traffic shaping, puis conteneurs Docker pour superviser l'ensemble.</p></div>
+            <div><h4>Le résultat</h4><p>Un banc d'essai réutilisable pour valider une configuration avant de la déployer en production.</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="proj p4 reveal" id="p-wifi">
+        <div class="proj-side">
+          <span class="pk">Melchior Boot</span>
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M10 26a32 32 0 0144 0M18 34a20 20 0 0128 0M26 42a8 8 0 0112 0"/><circle cx="32" cy="50" r="3" fill="currentColor"/></svg>
+        </div>
+        <div class="proj-main">
+          <h3>Déploiements WiFi et liaisons point-à-point</h3>
+          <p>Installation de réseaux sans fil et maintien du service pour des clients répartis sur plusieurs sites.</p>
+          <div class="tags"><span class="tag">WiFi</span><span class="tag">Point-à-point</span><span class="tag">MikroTik</span><span class="tag">MikHmon</span><span class="tag">Monitoring</span></div>
+          <button class="proj-toggle" aria-expanded="false">Voir l'étude de cas <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></button>
+          <div class="case">
+            <div><h4>Le besoin</h4><p>Connecter des clients professionnels et des espaces publics, et réagir vite en cas de panne.</p></div>
+            <div><h4>Ce que j'ai fait</h4><p>Plus de 15 installations WiFi, configuration de liaisons point-à-point, surveillance des sites depuis le tableau de bord et déplacement sur site dès qu'une antenne tombait.</p></div>
+            <div><h4>Le résultat</h4><p>Plus de 50 interventions menées et des clients remis en service rapidement.</p></div>
+          </div>
+        </div>
+      </article>
+
     </div>
   </div>
 </section>
 
-<section id="formation">
+<!-- ===== COMPÉTENCES ===== -->
+<section id="competences">
   <div class="wrap">
-    <div class="eyebrow">Formation</div>
-    <h2 class="section-title">Parcours académique</h2>
-    <div class="edu-item">
-      <div class="edu-year">2025</div>
-      <h3>Licence Réseaux et Sécurité Informatique — Mention Bien</h3>
-      <p>Collège de Paris Supérieur, Togo</p>
+    <div class="sec-head reveal">
+      <h2>Compétences</h2>
+      <p>Rangées comme sur un panneau de brassage, avec les couleurs du câblage T568B.</p>
     </div>
-    <div class="edu-item">
-      <div class="edu-year">2022</div>
-      <h3>Baccalauréat D — Mention Assez Bien</h3>
-      <p>Collège Protestant Lomé Agbalèpédogan</p>
+    <div class="panel reveal">
+      <div class="row"><h3><i style="background:var(--orange)"></i>Réseau</h3><div class="ports" style="--c:var(--orange)"><span class="port">LAN / WAN</span><span class="port">TCP/IP</span><span class="port">VLAN</span><span class="port">Routage et switching (bases Cisco)</span><span class="port">DNS</span><span class="port">DHCP</span><span class="port">NAT</span><span class="port">QoS</span><span class="port">MikroTik</span><span class="port">OpenWrt</span><span class="port">WiFi public et privé</span><span class="port">Liaisons point-à-point</span></div></div>
+      <div class="row"><h3><i style="background:var(--blue)"></i>Systèmes</h3><div class="ports" style="--c:var(--blue)"><span class="port">Windows Server 2016 / 2019 / 2022</span><span class="port">Active Directory</span><span class="port">GPO</span><span class="port">RDP</span><span class="port">Linux Ubuntu / Debian</span><span class="port">Nginx</span></div></div>
+      <div class="row"><h3><i style="background:var(--green)"></i>Supervision</h3><div class="ports" style="--c:var(--green)"><span class="port">Grafana</span><span class="port">Prometheus</span><span class="port">Loki</span><span class="port">Nagios</span><span class="port">MikHmon</span><span class="port">Monitoring multi-sites</span></div></div>
+      <div class="row"><h3><i style="background:var(--brown)"></i>Virtualisation et cloud</h3><div class="ports" style="--c:var(--brown)"><span class="port">VMware</span><span class="port">VirtualBox</span><span class="port">Citrix</span><span class="port">AWS (EC2, S3)</span><span class="port">Google Cloud</span><span class="port">Docker</span><span class="port">Git / GitHub</span></div></div>
+      <div class="row"><h3><i style="background:var(--red)"></i>Sécurité</h3><div class="ports" style="--c:var(--red)"><span class="port">Gestion des accès</span><span class="port">Politiques de sécurité</span><span class="port">Sauvegardes</span><span class="port">pfSense</span><span class="port">Master cybersécurité en cours</span></div></div>
+      <div class="row"><h3><i style="background:var(--muted)"></i>Matériel et terrain</h3><div class="ports" style="--c:var(--muted)"><span class="port">Rackage</span><span class="port">Câblage Ethernet et fibre</span><span class="port">Interfaces iLO</span><span class="port">Diagnostic et dépannage</span><span class="port">Suivi de déploiement</span><span class="port">Support utilisateurs</span></div></div>
     </div>
   </div>
 </section>
 
-<section id="contact" style="border-bottom:none;">
+<!-- ===== CONSOLE + QUIZ ===== -->
+<section id="jouer">
   <div class="wrap">
-    <div class="eyebrow">Contact</div>
-    <h2 class="section-title">Discutons</h2>
-    <div class="contact-grid">
-      <div class="contact-card">
-        <h3>Coordonnées</h3>
-        <div class="contact-line">📞 <b>+228 97 27 38 60</b></div>
-        <div class="contact-line">✉️ <b>essohambaka@gmail.com</b></div>
-        <div class="contact-line">📍 <b>Totsi – Gbinkomé, Togo</b></div>
+    <div class="sec-head reveal">
+      <h2>Console et quiz</h2>
+      <p>Explore mon profil en ligne de commande, ou teste tes réflexes réseau en 10 questions.</p>
+    </div>
+    <div class="play">
+      <div class="term reveal" id="terminal">
+        <div class="term-bar"><i style="background:#F0657E"></i><i style="background:#F2B84A"></i><i style="background:#52C483"></i><span style="margin-left:8px">amen@lome:~</span></div>
+        <div class="term-body" id="termBody" aria-live="polite"></div>
+        <div class="term-chips" id="termChips">
+          <button data-cmd="help">help</button><button data-cmd="whoami">whoami</button><button data-cmd="skills">skills</button><button data-cmd="ping recruteur">ping recruteur</button><button data-cmd="sudo embaucher">sudo embaucher</button>
+        </div>
       </div>
-      <div class="contact-card">
-        <h3>Référence</h3>
-        <div class="contact-line"><b>M. Agoutoco Poko Caleb Benaja</b></div>
-        <div class="contact-line" style="margin-top:-6px;">Ingénieur expert en cybersécurité, big data, administration des systèmes d'information et gestion des réseaux</div>
-        <div class="contact-line" style="margin-top:6px; font-size:13px; color:var(--text-dim);">Coordonnées complètes transmises sur demande</div>
+
+      <div class="quiz reveal" id="quiz">
+        <div class="quiz-top"><h3>Quiz réseau</h3><span class="qcount" id="qcount"></span></div>
+        <div class="qbar"><span id="qbar"></span></div>
+        <div id="qzone"></div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact reveal">
+      <div>
+        <h2>Un réseau à déployer ou à sécuriser ?</h2>
+        <p>Je suis disponible pour un poste en administration systèmes, réseaux ou sécurité, à Lomé ou à distance. Écris-moi, je réponds rapidement.</p>
+      </div>
+      <div class="clinks" id="clinks"></div>
+    </div>
+  </div>
+</section>
+</main>
 
 <footer>
-  root@baka:~$ echo "merci de votre visite" — © <span id="year"></span> BAKA Essoham Exaucé Amen
+  <div class="wrap">
+    <span>© <span id="year"></span> BAKA Essoham Exaucé Amen, Lomé, Togo</span>
+    <span>Site statique hébergé sur GitHub Pages</span>
+  </div>
 </footer>
 
+<!-- Visite guidée -->
+<div class="tour-spot tour-hidden" id="tourSpot"></div>
+<div class="tour-tip tour-hidden" id="tourTip" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+  <span class="step" id="tourStep"></span>
+  <h4 id="tourTitle"></h4>
+  <p id="tourText"></p>
+  <div class="tour-dots" id="tourDots"></div>
+  <div class="tour-btns">
+    <button class="tour-skip" id="tourSkip">Quitter</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost" id="tourPrev">Précédent</button>
+      <button class="btn btn-orange" id="tourNext">Suivant</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status">
+  <span>Première visite ? Je te fais le tour en 1 minute.</span>
+  <button id="toastGo">C'est parti</button>
+  <button class="x" id="toastX" aria-label="Fermer">✕</button>
+</div>
+
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+/* =========================================================
+   À PERSONNALISER : tes coordonnées (laisse "" pour masquer)
+   ========================================================= */
+const CONFIG = {
+  email:    "essohambaka@gmail.com",
+  phone:    "+228 97 27 38 60",                  // mets "" pour masquer
+  linkedin: "",                                  // ex : "https://www.linkedin.com/in/ton-profil"
+  github:   "https://github.com/amenbk09",
+  cv:       "cv-amen-baka.pdf"                  // mets ton CV dans le dépôt avec ce nom
+};
 
-  // Typing effect in hero prompt
-  (function(){
-    const el = document.getElementById('typed');
-    const text = "whoami";
-    let i = 0;
-    function type(){
-      if(i <= text.length){
-        el.textContent = text.slice(0, i);
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
+  set(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+};
+$("#year").textContent = new Date().getFullYear();
+
+/* ---------- Thème ---------- */
+(function(){
+  const saved = store.get("theme");
+  if (saved) document.documentElement.dataset.theme = saved;
+  $("#themeBtn").addEventListener("click", () => {
+    const cur = document.documentElement.dataset.theme ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = cur === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    store.set("theme", next);
+  });
+})();
+
+/* ---------- Menu mobile + lien actif ---------- */
+(function(){
+  const links = $("#navLinks"), burger = $("#burger");
+  burger.addEventListener("click", () => {
+    const open = links.classList.toggle("open");
+    burger.setAttribute("aria-expanded", open);
+  });
+  $$("#navLinks a").forEach(a => a.addEventListener("click", () => {
+    links.classList.remove("open"); burger.setAttribute("aria-expanded", "false");
+  }));
+  const map = new Map($$("#navLinks a").map(a => [a.getAttribute("href").slice(1), a]));
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && map.has(e.target.id)) {
+      map.forEach(a => a.classList.remove("active"));
+      map.get(e.target.id).classList.add("active");
+    }
+  }), { rootMargin: "-45% 0px -50% 0px" });
+  $$("main section[id]").forEach(s => io.observe(s));
+})();
+
+/* ---------- Topologie cliquable ---------- */
+(function(){
+  if (reduce) $("#topo").pauseAnimations();
+  $$("#topo .node").forEach(n => {
+    const go = () => { const t = $(n.dataset.go); if (t) t.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); };
+    n.addEventListener("click", go);
+    n.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+})();
+
+/* ---------- Apparitions + compteurs ---------- */
+(function(){
+  const count = el => {
+    const end = +el.dataset.count, suf = el.dataset.suffix || "";
+    if (reduce) { el.textContent = end + suf; return; }
+    const t0 = performance.now(), d = 1300;
+    const step = t => {
+      const p = Math.min((t - t0) / d, 1), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(end * e) + (p === 1 ? suf : "");
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add("in");
+    $$("[data-count]", e.target).forEach(count);
+    io.unobserve(e.target);
+  }), { threshold: .15 });
+  $$(".reveal").forEach(el => io.observe(el));
+})();
+
+/* ---------- Études de cas dépliables ---------- */
+$$(".proj-toggle").forEach(b => b.addEventListener("click", () => {
+  const c = b.nextElementSibling, open = c.classList.toggle("open");
+  b.setAttribute("aria-expanded", open);
+  b.firstChild.textContent = open ? "Masquer l'étude de cas " : "Voir l'étude de cas ";
+}));
+
+/* ---------- Contact ---------- */
+(function(){
+  const ic = {
+    mail: '<path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/>',
+    phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/>',
+    in:   '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 014 0v4M12 10v7"/>',
+    gh:   '<path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5a3 3 0 00-1-2.5c3 0 6-1.5 6-6.5a5 5 0 00-1.3-3.5 4.6 4.6 0 00-.1-3.5s-1.2-.3-3.6 1.3a12 12 0 00-6.4 0C6.2 1.7 5 2 5 2a4.6 4.6 0 00-.1 3.5A5 5 0 003.6 9c0 5 3 6.5 6 6.5a3 3 0 00-1 2.5V21"/>',
+    cv:   '<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 13h6M9 17h6"/>'
+  };
+  const items = [
+    CONFIG.email && { h: "mailto:" + CONFIG.email, i: ic.mail, t: "Email", s: CONFIG.email },
+    CONFIG.phone && { h: "tel:" + CONFIG.phone.replace(/\s/g, ""), i: ic.phone, t: "Téléphone", s: CONFIG.phone },
+    CONFIG.linkedin && { h: CONFIG.linkedin, i: ic.in, t: "LinkedIn", s: "Mon profil professionnel", ext: 1 },
+    CONFIG.github && { h: CONFIG.github, i: ic.gh, t: "GitHub", s: "Mes configs et mes labs", ext: 1 },
+    CONFIG.cv && { h: CONFIG.cv, i: ic.cv, t: "Télécharger mon CV", s: "Format PDF", dl: 1 }
+  ].filter(Boolean);
+  $("#clinks").innerHTML = items.map(x =>
+    `<a href="${x.h}"${x.ext ? ' target="_blank" rel="noopener"' : ""}${x.dl ? " download" : ""}>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${x.i}</svg>
+      <span>${x.t}<small>${x.s}</small></span></a>`).join("");
+})();
+
+/* ---------- Console interactive ---------- */
+(function(){
+  const body = $("#termBody");
+  const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  const line = html => { const d = document.createElement("div"); d.className = "term-line"; d.innerHTML = html; body.insertBefore(d, inputRow); body.scrollTop = body.scrollHeight; };
+  const inputRow = document.createElement("div");
+  inputRow.className = "term-input";
+  inputRow.innerHTML = '<span class="ok">amen@lome</span><span class="m">:~$</span><input id="termIn" aria-label="Commande de la console" autocomplete="off" spellcheck="false" placeholder="tape help">';
+  body.appendChild(inputRow);
+  const input = $("#termIn");
+  let started = false, ready = Promise.resolve();
+  const go = id => { const t = $(id); if (t) t.scrollIntoView({ behavior: reduce ? "auto" : "smooth" }); };
+
+  const cmds = {
+    help: () => `<span class="c">Commandes disponibles</span>
+  <span class="k">whoami</span>        qui je suis
+  <span class="k">skills</span>        mes compétences
+  <span class="k">experience</span>    mes stages
+  <span class="k">projets</span>       aller aux projets
+  <span class="k">ping recruteur</span> tester la connexion
+  <span class="k">contact</span>       me joindre
+  <span class="k">langues</span>       langues parlées
+  <span class="k">quiz</span>          lancer le quiz
+  <span class="k">tour</span>          visite guidée
+  <span class="k">clear</span>         effacer l'écran`,
+    whoami: () => `BAKA Essoham Exaucé <span class="k">Amen</span>
+Administrateur systèmes, réseaux et sécurité, Lomé (Togo)
+Licence réseau et sécurité, mention bien. Master cybersécurité en cours.`,
+    skills: () => `<span class="k">réseau</span>      VLAN, routage, NAT, QoS, MikroTik, OpenWrt, PtP
+<span class="c">systèmes</span>    Windows Server, AD, GPO, Linux, Nginx
+<span class="ok">supervision</span> Grafana, Prometheus, Loki, Nagios, MikHmon
+<span class="m">cloud</span>       VMware, AWS, Google Cloud, Docker`,
+    experience: () => `<span class="c">[2026]</span> Moov Africa Togo   QoS, supervision, déploiement
+<span class="k">[2025]</span> Melchior Boot      15+ WiFi, 50+ interventions, PtP`,
+    projets: () => { go("#projets"); return "Direction la section Projets…"; },
+    contact: () => { go("#contact"); return `Email : <span class="k">${esc(CONFIG.email || "voir la section Contact")}</span>`; },
+    quiz: () => { go("#quiz"); return "Bonne chance pour le quiz !"; },
+    tour: () => { setTimeout(() => Tour.start(), 300); return "Démarrage de la visite guidée…"; },
+    langues: () => "Français, anglais",
+    "ping recruteur": () => {
+      let i = 0;
+      const t = setInterval(() => {
         i++;
-        setTimeout(type, 130);
-      }
-    }
-    type();
-  })();
+        line(`64 octets de recruteur : icmp_seq=${i} ttl=64 temps=${(Math.random() * 3 + 0.4).toFixed(2)} ms`);
+        if (i === 3) { clearInterval(t); line(`<span class="ok">3 paquets transmis, 3 reçus, 0 % de perte. Le candidat répond.</span>`); }
+      }, reduce ? 0 : 450);
+      return "PING recruteur : 56 octets de données.";
+    },
+    "sudo embaucher": () => { setTimeout(() => go("#contact"), 900); return `<span class="ok">[sudo] autorisation accordée.</span> Excellent choix. Redirection vers le contact…`; },
+    sudo: () => `<span class="k">Usage :</span> sudo embaucher`,
+    ls: () => `parcours/  projets/  competences/  cv.pdf  <span class="ok">motivation.txt</span>`,
+    "cat motivation.txt": () => "Apprendre vite, réparer sans attendre, sécuriser ce que je déploie.",
+    "rm -rf /": () => `<span class="k">Refusé.</span> Je protège les systèmes, je ne les casse pas.`,
+    clear: () => { $$(".term-line", body).forEach(n => n.remove()); return null; }
+  };
 
-  // VLSM data — plan d'adressage réel du projet Moov Africa Togo (192.168.4.0/22)
-  const subnets = [
-    {name:"Utilisateurs filaires", need:250, cidr:"/24", net:"192.168.4.0", first:"192.168.4.1", last:"192.168.4.254", bcast:"192.168.4.255", size:256},
-    {name:"Téléphonie IP (VLAN VOICE)", need:120, cidr:"/25", net:"192.168.5.0", first:"192.168.5.1", last:"192.168.5.126", bcast:"192.168.5.127", size:128},
-    {name:"Wi-Fi Trusted", need:100, cidr:"/25", net:"192.168.5.128", first:"192.168.5.129", last:"192.168.5.254", bcast:"192.168.5.255", size:128},
-    {name:"Serveurs Production", need:64, cidr:"/25", net:"192.168.6.0", first:"192.168.6.1", last:"192.168.6.126", bcast:"192.168.6.127", size:128},
-    {name:"Wi-Fi Guest", need:50, cidr:"/26", net:"192.168.6.128", first:"192.168.6.129", last:"192.168.6.190", bcast:"192.168.6.191", size:64},
-    {name:"Serveurs Préproduction", need:28, cidr:"/26", net:"192.168.6.192", first:"192.168.6.193", last:"192.168.6.254", bcast:"192.168.6.255", size:64},
-    {name:"Agence 1", need:39, cidr:"/26", net:"192.168.7.0", first:"192.168.7.1", last:"192.168.7.62", bcast:"192.168.7.63", size:64},
-    {name:"Agence 2", need:32, cidr:"/26", net:"192.168.7.64", first:"192.168.7.65", last:"192.168.7.126", bcast:"192.168.7.127", size:64},
-    {name:"DMZ Entreprise", need:15, cidr:"/27", net:"192.168.7.128", first:"192.168.7.129", last:"192.168.7.158", bcast:"192.168.7.159", size:32},
-    {name:"DMZ Partenaires", need:5, cidr:"/28", net:"192.168.7.160", first:"192.168.7.161", last:"192.168.7.174", bcast:"192.168.7.175", size:16},
-    {name:"Serveurs Test", need:8, cidr:"/28", net:"192.168.7.176", first:"192.168.7.177", last:"192.168.7.190", bcast:"192.168.7.191", size:16},
-    {name:"Réserve", need:0, cidr:"/26", net:"192.168.7.192", first:"—", last:"—", bcast:"192.168.7.255", size:64, reserve:true}
+  const run = async raw => {
+    const c = raw.trim().toLowerCase().replace(/\s+/g, " ");
+    if (!c) return;
+    if (!started) { started = true; ready = typeIntro(); }
+    await ready;
+    line(`<span class="ok">amen@lome</span><span class="m">:~$</span> ${esc(raw)}`);
+    const out = cmds[c] ? cmds[c]() : `<span class="m">commande introuvable : ${esc(c)}. Tape</span> <span class="k">help</span>`;
+    if (out) line(out);
+  };
+  input.addEventListener("keydown", e => { if (e.key === "Enter") { run(input.value); input.value = ""; } });
+  $$("#termChips button").forEach(b => b.addEventListener("click", () => { run(b.dataset.cmd); }));
+  body.addEventListener("click", () => input.focus({ preventScroll: true }));
+
+  // séquence d'ouverture, tapée une seule fois quand la console devient visible
+  const intro = [["whoami", cmds.whoami()], ["cat statut.txt", `<span class="ok">Disponible.</span> Tape <span class="k">help</span> pour explorer.`]];
+
+  const typeIntro = async () => {
+    for (const [cmd, out] of intro) {
+      const d = document.createElement("div"); d.className = "term-line";
+      d.innerHTML = '<span class="ok">amen@lome</span><span class="m">:~$</span> ';
+      body.insertBefore(d, inputRow);
+      for (const ch of cmd) { d.innerHTML += esc(ch); if (!reduce) await new Promise(r => setTimeout(r, 55)); }
+      if (!reduce) await new Promise(r => setTimeout(r, 250));
+      line(out);
+    }
+  };
+  new IntersectionObserver((es, o) => { if (es[0].isIntersecting && !started) { started = true; ready = typeIntro(); o.disconnect(); } }, { threshold: .4 }).observe($("#terminal"));
+})();
+
+/* ---------- Quiz ---------- */
+(function(){
+  const Q = [
+    { q: "Quel port utilise le DNS par défaut ?", o: ["53", "80", "22", "443"], a: 0, e: "Le DNS écoute sur le port 53, en UDP pour la plupart des requêtes et en TCP pour les transferts de zone." },
+    { q: "Que signifie l'échange DORA du DHCP ?", o: ["Discover, Offer, Request, Acknowledge", "Deny, Open, Route, Accept", "Data, Origin, Relay, Address", "Domain, Owner, Record, Alias"], a: 0, e: "Le client cherche un serveur, reçoit une offre, la demande, puis le serveur confirme le bail." },
+    { q: "Combien d'adresses hôtes utilisables dans un réseau en /24 ?", o: ["256", "255", "254", "24"], a: 2, e: "256 adresses, moins l'adresse réseau et l'adresse de broadcast : 254 hôtes." },
+    { q: "Quel enregistrement DNS sert à la recherche inversée (IP vers nom) ?", o: ["MX", "PTR", "CNAME", "A"], a: 1, e: "Les enregistrements PTR vivent dans la zone de recherche inversée, comme dans mon lab Active Directory." },
+    { q: "Sur quel protocole repose la commande ping ?", o: ["TCP", "UDP", "ICMP", "ARP"], a: 2, e: "Ping envoie des requêtes ICMP Echo Request et attend des Echo Reply." },
+    { q: "À quelle couche du modèle OSI travaille principalement un routeur ?", o: ["Couche 1", "Couche 2", "Couche 3", "Couche 7"], a: 2, e: "Le routeur prend ses décisions à partir des adresses IP, donc à la couche réseau (3)." },
+    { q: "Dans la stack Grafana, Prometheus, Loki, qui s'occupe des logs ?", o: ["Grafana", "Prometheus", "Loki", "Aucun des trois"], a: 2, e: "Prometheus collecte les métriques, Loki les logs, et Grafana affiche le tout." },
+    { q: "À quoi sert la QoS sur un réseau ?", o: ["Chiffrer le trafic", "Prioriser certains flux", "Attribuer des adresses IP", "Bloquer les publicités"], a: 1, e: "La qualité de service garantit que les flux importants passent en premier quand le lien est chargé." },
+    { q: "Quelle norme définit le marquage des VLAN sur un lien trunk ?", o: ["802.11ac", "802.3af", "802.1X", "802.1Q"], a: 3, e: "802.1Q ajoute une étiquette VLAN aux trames. 802.1X, lui, sert à l'authentification des ports." },
+    { q: "Un utilisateur te dit « Internet ne marche pas ». Ton premier réflexe ?", o: ["Réinstaller Windows", "Vérifier le lien et pinguer la passerelle", "Changer le routeur", "Redémarrer tout le datacenter"], a: 1, e: "On part du bas : lien physique, adresse IP, passerelle, puis DNS. Les solutions radicales attendront." }
   ];
+  let i = 0, score = 0;
+  const zone = $("#qzone"), bar = $("#qbar"), cnt = $("#qcount");
 
-  const bar = document.getElementById('vlsmBar');
-  const detail = document.getElementById('vlsmDetail');
-  document.getElementById('segcount').textContent = subnets.length;
-
-  subnets.forEach((s, idx) => {
-    const seg = document.createElement('div');
-    seg.className = 'vlsm-seg ' + (s.reserve ? 'reserve' : (idx % 2 === 0 ? 'c1' : 'c2'));
-    seg.style.width = (s.size / 1024 * 100) + '%';
-    seg.textContent = s.size >= 64 ? s.name.split(' ')[0] : '';
-    seg.setAttribute('tabindex', '0');
-    seg.setAttribute('role', 'button');
-    seg.setAttribute('aria-label', s.name);
-    function show(){
-      document.querySelectorAll('.vlsm-seg').forEach(el => el.classList.remove('active'));
-      seg.classList.add('active');
-      detail.innerHTML = `
-        <div class="vd-title">${s.name}${s.reserve ? ' (bloc libre pour extension future)' : ''}</div>
-        <div class="vd-grid">
-          <div><span>Besoin</span>${s.reserve ? '—' : s.need + ' hôtes'}</div>
-          <div><span>Masque</span>${s.cidr}</div>
-          <div><span>Adresse réseau</span>${s.net}</div>
-          <div><span>Première utilisable</span>${s.first}</div>
-          <div><span>Dernière utilisable</span>${s.last}</div>
-          <div><span>Broadcast</span>${s.bcast}</div>
-        </div>`;
+  const render = () => {
+    cnt.textContent = `Question ${i + 1} sur ${Q.length}`;
+    bar.style.width = (i / Q.length * 100) + "%";
+    const it = Q[i];
+    zone.innerHTML = `<p class="qq">${it.q}</p>
+      <div class="opts">${it.o.map((t, k) => `<button class="opt" data-k="${k}">${t}</button>`).join("")}</div>
+      <div class="qexp" id="qexp"></div>
+      <div class="qnav"><button class="btn btn-primary" id="qnext" hidden>${i === Q.length - 1 ? "Voir mon score" : "Question suivante"}</button></div>`;
+    $$(".opt", zone).forEach(b => b.addEventListener("click", () => pick(+b.dataset.k)));
+    $("#qnext").addEventListener("click", () => { i++; i < Q.length ? render() : end(); });
+  };
+  const pick = k => {
+    const it = Q[i], opts = $$(".opt", zone);
+    opts.forEach(b => b.disabled = true);
+    opts[it.a].classList.add("good");
+    const ok = k === it.a;
+    if (ok) score++; else opts[k].classList.add("bad");
+    const ex = $("#qexp");
+    ex.innerHTML = `<b>${ok ? "Exact !" : "Pas tout à fait."}</b> ${it.e}`;
+    ex.classList.add("show");
+    const n = $("#qnext"); n.hidden = false; n.focus({ preventScroll: true });
+  };
+  const end = () => {
+    bar.style.width = "100%";
+    cnt.textContent = "Terminé";
+    const msg = score === Q.length ? "Score parfait. Tu pourrais faire partie de mon équipe."
+      : score >= 7 ? "Très solide. Tu parles couramment le réseau."
+      : score >= 4 ? "Pas mal ! Quelques paquets perdus en route."
+      : "Connexion instable… Rejoue, ça s'améliore vite.";
+    zone.innerHTML = `<div class="qend"><div class="big">${score}/${Q.length}</div><p>${msg}</p>
+      <div class="cta" style="justify-content:center"><button class="btn btn-primary" id="qagain">Rejouer</button><a class="btn btn-ghost" href="#contact">Me contacter</a></div></div>`;
+    $("#qagain").addEventListener("click", () => { i = 0; score = 0; render(); });
+    if (score >= 7 && !reduce) confetti();
+  };
+  const confetti = () => {
+    const cols = ["#D9661F", "#2369C9", "#2A8F55", "#8A5A3B", "#C73550"];
+    for (let n = 0; n < 70; n++) {
+      const c = document.createElement("i");
+      c.className = "confetti";
+      c.style.left = Math.random() * 100 + "vw";
+      c.style.background = cols[n % cols.length];
+      c.style.animationDuration = (1.8 + Math.random() * 1.6) + "s";
+      c.style.animationDelay = Math.random() * .4 + "s";
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
     }
-    seg.addEventListener('click', show);
-    seg.addEventListener('keypress', e => { if(e.key === 'Enter') show(); });
-    bar.appendChild(seg);
-  });
+  };
+  render();
+})();
 
-  // Diagramme de flux — Supervision MikroTik / WireGuard / AWS
-  const flowNodes = [
-    {icon:'🖥️', name:'Administrateur', detail:'Poste de l\'administrateur réseau, point de départ de la connexion distante.'},
-    {icon:'🔒', name:'VPN WireGuard', detail:'Tunnel chiffré WireGuard établi pour un accès distant sécurisé à l\'infrastructure cloud, sans exposer de ports publics inutiles.'},
-    {icon:'☁️', name:'AWS EC2', detail:'Instance cloud hébergeant MikHmon, l\'interface web de supervision des routeurs MikroTik.'},
-    {icon:'📡', name:'MikroTik', detail:'Routeurs MikroTik supervisés en temps réel via MikHmon : utilisateurs connectés, sessions actives, consommation de données.'},
-    {icon:'🔔', name:'CloudWatch', detail:'Système d\'alerte AWS CloudWatch configuré sur l\'instance EC2 pour surveiller la disponibilité du service et notifier en cas d\'anomalie.'}
+/* ---------- Visite guidée ---------- */
+const Tour = (function(){
+  const steps = [
+    { el: "#heroText", t: "Bienvenue", d: "Je suis Amen, administrateur systèmes, réseaux et sécurité à Lomé. Voici le tour du site en quelques étapes." },
+    { el: "#topoCard", t: "Mon parcours en topologie", d: "Mon parcours dessiné comme un réseau. Chaque nœud est cliquable et mène à la section qui en parle." },
+    { el: ".metrics", t: "En chiffres", d: "Le concret du terrain : installations WiFi, interventions et outils de supervision." },
+    { el: ".timeline", t: "Mes expériences", d: "Mes deux stages : opérateur télécom chez Moov Africa Togo, et terrain chez Melchior Boot." },
+    { el: "#p-qos", t: "Mes projets", d: "Chaque projet se déplie en étude de cas : le besoin, ce que j'ai fait, le résultat." },
+    { el: ".panel", t: "Compétences", d: "Rangées comme un panneau de brassage, par famille." },
+    { el: "#terminal", t: "La console", d: "Tape des commandes comme sur un vrai terminal. Essaie « sudo embaucher »." },
+    { el: "#quiz", t: "Le quiz", d: "Dix questions pour tester tes réflexes réseau. Score parfait : confettis garantis." },
+    { el: "#clinks", t: "Me contacter", d: "Email, téléphone, GitHub et mon CV à télécharger. Merci pour la visite !" }
   ];
+  const spot = $("#tourSpot"), tip = $("#tourTip");
+  let k = 0, active = false;
 
-  const flowDiagram = document.getElementById('flowDiagram');
-  const flowDetail = document.getElementById('flowDetail');
+  const place = () => {
+    const el = $(steps[k].el); if (!el) return;
+    const r = el.getBoundingClientRect(), pad = 8;
+    Object.assign(spot.style, { top: r.top - pad + "px", left: r.left - pad + "px", width: r.width + pad * 2 + "px", height: r.height + pad * 2 + "px" });
+    if (innerWidth <= 640) return; // fixé en bas sur mobile
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let top, left = r.left + r.width / 2 - tw / 2;
+    if (r.bottom + 18 + th < innerHeight - 12) top = r.bottom + 18;          // en dessous
+    else if (r.top - th - 18 > 12) top = r.top - th - 18;                     // au-dessus
+    else if (innerWidth - r.right > tw + 32) { left = r.right + 20; top = r.top + r.height / 2 - th / 2; } // à droite
+    else if (r.left > tw + 32) { left = r.left - tw - 20; top = r.top + r.height / 2 - th / 2; }          // à gauche
+    else top = innerHeight - th - 16;
+    top = Math.max(12, Math.min(top, innerHeight - th - 12));
+    left = Math.max(16, Math.min(left, innerWidth - tw - 16));
+    tip.style.top = top + "px"; tip.style.left = left + "px";
+  };
+  const show = () => {
+    const s = steps[k], el = $(s.el);
+    $("#tourStep").textContent = `Étape ${k + 1} sur ${steps.length}`;
+    $("#tourTitle").textContent = s.t;
+    $("#tourText").textContent = s.d;
+    $("#tourDots").innerHTML = steps.map((_, j) => `<i class="${j === k ? "on" : ""}"></i>`).join("");
+    $("#tourPrev").style.visibility = k ? "visible" : "hidden";
+    $("#tourNext").textContent = k === steps.length - 1 ? "Terminer" : "Suivant";
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: innerWidth <= 640 ? "start" : "center" });
+    setTimeout(place, reduce ? 0 : 450);
+  };
+  const start = () => {
+    $("#toast").classList.remove("show");
+    $("#navLinks").classList.remove("open");
+    $$(".reveal").forEach(e => e.classList.add("in"));
+    active = true; k = 0;
+    spot.classList.remove("tour-hidden"); tip.classList.remove("tour-hidden");
+    show(); $("#tourNext").focus({ preventScroll: true });
+    store.set("toured", "1");
+  };
+  const stop = () => { active = false; spot.classList.add("tour-hidden"); tip.classList.add("tour-hidden"); };
+  const next = () => { if (k < steps.length - 1) { k++; show(); } else stop(); };
+  const prev = () => { if (k > 0) { k--; show(); } };
 
-  flowNodes.forEach((n, idx) => {
-    const node = document.createElement('div');
-    node.className = 'flow-node';
-    node.setAttribute('tabindex', '0');
-    node.setAttribute('role', 'button');
-    node.setAttribute('aria-label', n.name);
-    node.innerHTML = `<div class="fn-icon">${n.icon}</div>${n.name}`;
-    function show(){
-      document.querySelectorAll('.flow-node').forEach(el => el.classList.remove('active'));
-      node.classList.add('active');
-      flowDetail.innerHTML = `
-        <div class="vd-title">${n.name}</div>
-        <div class="vlsm-hint" style="margin-top:0; font-size:13px; color:var(--text-dim);">${n.detail}</div>`;
-    }
-    node.addEventListener('click', show);
-    node.addEventListener('keypress', e => { if(e.key === 'Enter') show(); });
-    flowDiagram.appendChild(node);
-    if(idx < flowNodes.length - 1){
-      const arrow = document.createElement('div');
-      arrow.className = 'flow-arrow';
-      flowDiagram.appendChild(arrow);
-    }
+  $("#tourNext").addEventListener("click", next);
+  $("#tourPrev").addEventListener("click", prev);
+  $("#tourSkip").addEventListener("click", stop);
+  addEventListener("keydown", e => {
+    if (!active) return;
+    if (e.key === "Escape") stop();
+    if (e.key === "ArrowRight") next();
+    if (e.key === "ArrowLeft") prev();
   });
+  addEventListener("resize", () => active && place());
+  addEventListener("scroll", () => active && place(), { passive: true });
+  [$("#tourBtn"), $("#heroTour")].forEach(b => b.addEventListener("click", start));
 
-  // Surlignage du lien de navigation actif au défilement
-  const navLinks = document.querySelectorAll('.nav-links a');
-  const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href')));
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        const id = '#' + entry.target.id;
-        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
-      }
-    });
-  }, { rootMargin: '-40% 0px -55% 0px' });
-  sections.forEach(s => { if(s) observer.observe(s); });
+  // proposition discrète à la première visite
+  if (!store.get("toured")) setTimeout(() => { if (!active && !store.get("toured")) $("#toast").classList.add("show"); }, 2200);
+  $("#toastGo").addEventListener("click", start);
+  $("#toastX").addEventListener("click", () => { $("#toast").classList.remove("show"); store.set("toured", "1"); });
+
+  return { start };
+})();
 </script>
-
 </body>
 </html>
